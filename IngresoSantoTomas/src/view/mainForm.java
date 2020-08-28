@@ -152,17 +152,17 @@ public class mainForm extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnGuardarActionPerformed
 
-    public static void main(String args[]) {
-
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new mainForm().setVisible(true);
-
-            }
-        });
-
-    }
+//    public static void main(String args[]) {
+//
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            @Override
+//            public void run() {
+//                new mainForm().setVisible(true);
+//
+//            }
+//        });
+//
+//    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
