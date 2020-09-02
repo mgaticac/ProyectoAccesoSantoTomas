@@ -1,13 +1,12 @@
 package util;
 
-import view.FPSensor;
+import model.FPSensor;
 import com.digitalpersona.onetouch.DPFPDataPurpose;
 import com.digitalpersona.onetouch.DPFPFeatureSet;
 import com.digitalpersona.onetouch.DPFPGlobal;
 import com.digitalpersona.onetouch.DPFPSample;
 import com.digitalpersona.onetouch.processing.DPFPFeatureExtraction;
 import com.digitalpersona.onetouch.processing.DPFPImageQualityException;
-import com.digitalpersona.onetouch.readers.DPFPReadersCollection;
 
 import java.util.List;
 import java.util.logging.Logger;

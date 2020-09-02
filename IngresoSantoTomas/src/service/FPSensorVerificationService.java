@@ -1,6 +1,6 @@
 package service;
 
-import view.FPSensor;
+import model.FPSensor;
 import model.FPUser;
 import com.digitalpersona.onetouch.DPFPFeatureSet;
 import com.digitalpersona.onetouch.DPFPGlobal;
@@ -11,31 +11,32 @@ import java.util.*;
 import java.util.logging.Logger;
 
 public class FPSensorVerificationService {
+
     public static Logger log = Logger.getLogger(FPSensor.class.getName());
 
     private FPUserService fpUserService;
 
-    public FPSensorVerificationService(FPUserService userService){
+    public FPSensorVerificationService(FPUserService userService) {
         this.fpUserService = userService;
     }
 
-    public Optional<FPUser> verify(DPFPFeatureSet featureSet){
+    public Optional<FPUser> verify(DPFPFeatureSet featureSet) {
         DPFPVerification matcher = DPFPGlobal.getVerificationFactory().createVerification();
         matcher.setFARRequested(DPFPVerification.MEDIUM_SECURITY_FAR);
-        Map<FPUser,DPFPVerificationResult> trueVerificationsResults = new HashMap<>();
+        Map<FPUser, DPFPVerificationResult> trueVerificationsResults = new HashMap<>();
         fpUserService.getAllUsers().forEach(fpUser -> {
             DPFPVerificationResult verify = matcher.verify(featureSet, fpUser.getTemplate());
-            if(verify.isVerified()){
+            if (verify.isVerified()) {
                 double FAR = (double) verify.getFalseAcceptRate() / DPFPVerification.PROBABILITY_ONE;
                 fpUser.setFAR(FAR);
-                trueVerificationsResults.put(fpUser,verify);
+                trueVerificationsResults.put(fpUser, verify);
             }
         });
-        if(trueVerificationsResults.isEmpty()){
+        if (trueVerificationsResults.isEmpty()) {
             log.info("No users match");
             return Optional.empty();
         }
-        if(trueVerificationsResults.size() == 1){
+        if (trueVerificationsResults.size() == 1) {
             FPUser key = trueVerificationsResults.entrySet()
                     .stream()
                     .findFirst()
@@ -43,16 +44,16 @@ public class FPSensorVerificationService {
                     .getKey();
             log.info("User matchs " + key.getUserId());
             Optional.of(key);
-        }else{
+        } else {
             log.warning("More than 1 user founded! -> Adjust your match FAR requested");
             int i = 0;
             FPUser minUser = null;
-            for (Map.Entry<FPUser,DPFPVerificationResult> entry: trueVerificationsResults.entrySet()) {
+            for (Map.Entry<FPUser, DPFPVerificationResult> entry : trueVerificationsResults.entrySet()) {
                 FPUser user = entry.getKey();
-                if(i == 0){
+                if (i == 0) {
                     minUser = user;
-                }else{
-                    if(minUser.getFAR() < user.getFAR()){
+                } else {
+                    if (minUser.getFAR() < user.getFAR()) {
                         minUser = user;
                     }
                 }

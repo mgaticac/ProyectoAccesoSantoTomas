@@ -1,7 +1,5 @@
-package view;
+package model;
 
-import model.FPSensorBehivor;
-import model.SensorFingerListener;
 import com.digitalpersona.onetouch.DPFPGlobal;
 import com.digitalpersona.onetouch.capture.DPFPCapture;
 import com.digitalpersona.onetouch.capture.DPFPCapturePriority;
@@ -9,6 +7,7 @@ import com.digitalpersona.onetouch.capture.event.DPFPDataEvent;
 import com.digitalpersona.onetouch.capture.event.DPFPDataListener;
 import com.digitalpersona.onetouch.capture.event.DPFPReaderStatusAdapter;
 import com.digitalpersona.onetouch.capture.event.DPFPReaderStatusEvent;
+import com.digitalpersona.onetouch.jni.JniException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,69 +26,75 @@ public class FPSensor implements DPFPDataListener, Runnable {
     private List<SensorFingerListener> listeners;
     private int lastStatus;
 
-    public FPSensor(String serialId){
+    public FPSensor(String serialId) {
         this.serialId = serialId;
         capture = DPFPGlobal.getCaptureFactory().createCapture();
         capture.setReaderSerialNumber(serialId);
         capture.setPriority(DPFPCapturePriority.CAPTURE_PRIORITY_LOW);
         capture.addDataListener(this::dataAcquired);
         thread = new Thread(this::run);
-        capture.addReaderStatusListener(new DPFPReaderStatusAdapter(){
+        capture.addReaderStatusListener(new DPFPReaderStatusAdapter() {
             public void readerConnected(DPFPReaderStatusEvent e) {
-                if (lastStatus != e.getReaderStatus())
-                    log.info("Reader " + serialId +" is connected");
+                if (lastStatus != e.getReaderStatus()) {
+                    log.info("Reader " + serialId + " is connected");
+                }
                 lastStatus = e.getReaderStatus();
             }
+
             public void readerDisconnected(DPFPReaderStatusEvent e) {
-                if (lastStatus != e.getReaderStatus())
+                if (lastStatus != e.getReaderStatus()) {
                     log.info("Reader  " + serialId + " is disconnected");
+                }
                 lastStatus = e.getReaderStatus();
             }
         });
         behivor = defaultBehivor;
     }
 
-    public String getSerialId(){
+    public String getSerialId() {
         return serialId;
     }
 
-    public void setBehivor(FPSensorBehivor behivor){
+    public void setBehivor(FPSensorBehivor behivor) {
         log.info("Changing sensor " + serialId + " to " + behivor);
         this.behivor = behivor;
     }
 
-    public void addFingerListener(SensorFingerListener listener){
-        if(listeners == null)
+    public void addFingerListener(SensorFingerListener listener) {
+        if (listeners == null) {
             listeners = new ArrayList<>();
+        }
         listeners.add(listener);
     }
 
-    public void removeFingerListener(SensorFingerListener listener){
-        if(listeners == null)
+    public void removeFingerListener(SensorFingerListener listener) {
+        if (listeners == null) {
             listeners.remove(listener);
+        }
     }
 
-    public void startReading(){
-        if(!capture.isStarted()){
+    public void startReading() {
+        if (!capture.isStarted()) {
             log.info("Sensor " + serialId + " Started");
             thread.start();
         }
 
     }
 
-    public void stopReading(){
-        if(capture.isStarted()){
+    public void stopReading() {
+        if (capture.isStarted()) {
             log.info("Sensor " + serialId + " Stopped");
             capture.stopCapture();
         }
     }
 
-    private void fireEvent(FPSensorBehivor behivor,DPFPDataEvent dpfpDataEvent){
-        if(listeners != null)
+    private void fireEvent(FPSensorBehivor behivor, DPFPDataEvent dpfpDataEvent) {
+        if (listeners != null) {
             listeners.forEach(l -> {
-                l.dataAdquired(serialId,behivor, dpfpDataEvent.getSample());
-                log.fine(String.format("Data Adquired on %s -> %s",serialId, dpfpDataEvent.toString()));
+                l.dataAdquired(serialId, behivor, dpfpDataEvent.getSample());
+                log.fine(String.format("Data Adquired on %s -> %s", serialId, dpfpDataEvent.toString()));
             });
+        }
     }
 
     @Override
@@ -99,6 +104,11 @@ public class FPSensor implements DPFPDataListener, Runnable {
 
     @Override
     public void run() {
-        capture.startCapture();
+
+        try {
+            capture.startCapture();
+        } catch (Exception e) {
+        }
+
     }
 }

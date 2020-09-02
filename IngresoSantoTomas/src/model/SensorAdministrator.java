@@ -1,6 +1,5 @@
-package view;
+package model;
 
-import model.*;
 import service.FPSensorVerificationService;
 import service.FPUserService;
 import util.SensorUtils;
@@ -12,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
-
 
 public class SensorAdministrator implements SensorFingerListener {
 
@@ -45,9 +43,8 @@ public class SensorAdministrator implements SensorFingerListener {
     }
 
     public void changeSensorBehivor(String sensorSerialId, FPSensorBehivor behivor) {
-        
-        
-        for (FPSensor sensor  : sensors) { //cambiad
+
+        for (FPSensor sensor : sensors) { //cambiad
             if (sensor.getSerialId().equals(sensorSerialId)) {
                 sensor.setBehivor(behivor);
             }

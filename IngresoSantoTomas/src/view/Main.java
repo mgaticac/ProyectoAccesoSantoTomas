@@ -1,5 +1,6 @@
 package view;
 
+import model.SensorAdministrator;
 import model.EnrollingListener;
 import model.FPSensorBehivor;
 import model.FPUser;
@@ -20,6 +21,8 @@ public class Main {
 
     public Main() {
         SensorAdministrator sa = SensorAdministrator.getInstance();
+
+        //LISTENER PARA VERIFICAR >>>>>>>
         sa.addVerificationListener(new VerificationListener() {
             @Override
             public void verificationEvent(Optional<FPUser> user) {
@@ -31,11 +34,15 @@ public class Main {
                 }
             }
         });
-        FPSensorBehivor enrolling = FPSensorBehivor.ENROLLING;
+        // <<<<<<< LISTENER PARA VERIFICAR 
+
+        FPSensorBehivor enrolling = FPSensorBehivor.ENROLLING; // Cambia el comportamiento del sensor
         String sensorId = SensorUtils.getSensorsSerialIds().get(0);
 
         System.out.println("Cabiando comportamiento de sensor" + sensorId + " a " + enrolling);
-        sa.changeSensorBehivor(sensorId, FPSensorBehivor.ENROLLING);
+        sa.changeSensorBehivor(sensorId, enrolling);
+
+        //LISTENER PARA ENROLAR >>>>>>>
         sa.addEnrollingListener(new EnrollingListener() {
             @Override
             public void enrollingEvent(DPFPSample data) {
@@ -45,12 +52,16 @@ public class Main {
                 } catch (DPFPImageQualityException e) {
                     e.printStackTrace();
                 }
-                System.out.println("Tratando de enrolar");
+
             }
         });
+        // <<<<<<< LISTENER PARA ENROLAR 
+        FPSensorBehivor validating = FPSensorBehivor.VALIDATING;
+        sa.changeSensorBehivor(sensorId, validating);
+
     }
 
-    public static void main(String[] args) {
-        new Main();
-    }
+//    public static void main(String[] args) {
+//        new Main();
+//    }
 }

@@ -19,10 +19,12 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
-    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,126,0,0,1,-41"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,126,0,0,1,-39"/>
   </AuxValues>
 
-  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
+    <Property name="useNullLayout" type="boolean" value="false"/>
+  </Layout>
   <SubComponents>
     <Container class="javax.swing.JPanel" name="jPanel1">
       <Properties>
@@ -34,8 +36,8 @@
         <Property name="focusable" type="boolean" value="false"/>
       </Properties>
       <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
-          <BorderConstraints direction="Center"/>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+          <AbsoluteConstraints x="0" y="0" width="-1" height="-1"/>
         </Constraint>
       </Constraints>
 
@@ -44,20 +46,22 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                      <Component id="jScrollPane1" max="32767" attributes="0"/>
-                      <Component id="jPanel2" alignment="0" max="32767" attributes="0"/>
-                      <Component id="jPanel3" alignment="1" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jPanel3" min="-2" pref="439" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="jScrollPane1" max="32767" attributes="0"/>
+                          <Component id="jPanel2" alignment="0" max="32767" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="jPanel3" min="-2" pref="257" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="jPanel3" min="-2" pref="264" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                   <Component id="jScrollPane1" min="-2" pref="104" max="-2" attributes="0"/>
@@ -82,13 +86,13 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="btnGuardar" max="32767" attributes="0"/>
-                          <Component id="btnIdentificar" pref="124" max="32767" attributes="0"/>
+                          <Component id="btnEnroll" max="32767" attributes="0"/>
+                          <Component id="btnIdentify" pref="124" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace pref="138" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="btnSalir" max="32767" attributes="0"/>
-                          <Component id="btnVerificar" pref="152" max="32767" attributes="0"/>
+                          <Component id="btnExit" max="32767" attributes="0"/>
+                          <Component id="btnVerify" pref="152" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -99,13 +103,13 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="btnGuardar" alignment="3" min="-2" pref="39" max="-2" attributes="0"/>
-                          <Component id="btnVerificar" alignment="3" min="-2" pref="39" max="-2" attributes="0"/>
+                          <Component id="btnEnroll" alignment="3" min="-2" pref="39" max="-2" attributes="0"/>
+                          <Component id="btnVerify" alignment="3" min="-2" pref="39" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="68" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="btnIdentificar" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
-                          <Component id="btnSalir" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
+                          <Component id="btnIdentify" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
+                          <Component id="btnExit" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
                   </Group>
@@ -113,30 +117,33 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JButton" name="btnGuardar">
+            <Component class="javax.swing.JButton" name="btnEnroll">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Guardar"/>
+                <Property name="text" type="java.lang.String" value="Enrolar Huella"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGuardarActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEnrollActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="btnVerificar">
+            <Component class="javax.swing.JButton" name="btnVerify">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Verificar"/>
+                <Property name="text" type="java.lang.String" value="Verificar Existencia"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnVerifyActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnIdentify">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Identificar Persona"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="btnIdentificar">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Identificar"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnSalir">
+            <Component class="javax.swing.JButton" name="btnExit">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Salir"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSalirActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnExitActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>
@@ -151,19 +158,16 @@
             <Property name="focusable" type="boolean" value="false"/>
           </Properties>
 
-          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
           <SubComponents>
             <Component class="javax.swing.JLabel" name="lblHuella">
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="0"/>
-                <Property name="text" type="java.lang.String" value="."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Cursor Por defecto"/>
+                </Property>
                 <Property name="focusable" type="boolean" value="false"/>
               </Properties>
-              <Constraints>
-                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
-                  <BorderConstraints direction="Center"/>
-                </Constraint>
-              </Constraints>
             </Component>
           </SubComponents>
         </Container>
