@@ -377,4 +377,5 @@ public class mainForm extends javax.swing.JFrame {
                 image.getScaledInstance(lblHuella.getWidth(), lblHuella.getHeight(), Image.SCALE_DEFAULT)));
 
     }
+    
 }
