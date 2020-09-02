@@ -13,9 +13,10 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class SensorUtils {
+
     public static Logger log = Logger.getLogger(FPSensor.class.getName());
 
-    public static List<String> getSensorsSerialIds(){
+    public static List<String> getSensorsSerialIds() {
         return DPFPGlobal.getReadersFactory().getReaders().stream()
                 .map(r -> r.getSerialNumber())
                 .collect(Collectors.toList());

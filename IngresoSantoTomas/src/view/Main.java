@@ -1,6 +1,5 @@
 package view;
 
-import model.SensorAdministrator;
 import model.EnrollingListener;
 import model.FPSensorBehivor;
 import model.FPUser;
@@ -12,6 +11,7 @@ import com.digitalpersona.onetouch.DPFPSample;
 import com.digitalpersona.onetouch.processing.DPFPImageQualityException;
 
 import java.util.Optional;
+import model.SensorAdministrator;
 
 public class Main {
 
@@ -21,8 +21,6 @@ public class Main {
 
     public Main() {
         SensorAdministrator sa = SensorAdministrator.getInstance();
-
-        //LISTENER PARA VERIFICAR >>>>>>>
         sa.addVerificationListener(new VerificationListener() {
             @Override
             public void verificationEvent(Optional<FPUser> user) {
@@ -34,15 +32,11 @@ public class Main {
                 }
             }
         });
-        // <<<<<<< LISTENER PARA VERIFICAR 
-
-        FPSensorBehivor enrolling = FPSensorBehivor.ENROLLING; // Cambia el comportamiento del sensor
+        FPSensorBehivor enrolling = FPSensorBehivor.ENROLLING;
         String sensorId = SensorUtils.getSensorsSerialIds().get(0);
 
         System.out.println("Cabiando comportamiento de sensor" + sensorId + " a " + enrolling);
-        sa.changeSensorBehivor(sensorId, enrolling);
-
-        //LISTENER PARA ENROLAR >>>>>>>
+        sa.changeSensorBehivor(sensorId, FPSensorBehivor.ENROLLING);
         sa.addEnrollingListener(new EnrollingListener() {
             @Override
             public void enrollingEvent(DPFPSample data) {
@@ -52,16 +46,12 @@ public class Main {
                 } catch (DPFPImageQualityException e) {
                     e.printStackTrace();
                 }
-
+                System.out.println("Tratando de enrolar");
             }
         });
-        // <<<<<<< LISTENER PARA ENROLAR 
-        FPSensorBehivor validating = FPSensorBehivor.VALIDATING;
-        sa.changeSensorBehivor(sensorId, validating);
-
     }
 
-//    public static void main(String[] args) {
-//        new Main();
-//    }
+    public static void main(String[] args) {
+        new Main();
+    }
 }

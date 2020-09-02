@@ -23,7 +23,7 @@ public class SensorAdministrator implements SensorFingerListener {
     private FPSensorVerificationService verificationService;
     private List<VerificationListener> verificationListeners;
 
-    private SensorAdministrator() {
+    public SensorAdministrator() {
         userService = new FPUserService();
         verificationService = new FPSensorVerificationService(userService);
 

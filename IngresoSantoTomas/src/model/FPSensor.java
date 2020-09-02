@@ -7,7 +7,6 @@ import com.digitalpersona.onetouch.capture.event.DPFPDataEvent;
 import com.digitalpersona.onetouch.capture.event.DPFPDataListener;
 import com.digitalpersona.onetouch.capture.event.DPFPReaderStatusAdapter;
 import com.digitalpersona.onetouch.capture.event.DPFPReaderStatusEvent;
-import com.digitalpersona.onetouch.jni.JniException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,11 +103,6 @@ public class FPSensor implements DPFPDataListener, Runnable {
 
     @Override
     public void run() {
-
-        try {
-            capture.startCapture();
-        } catch (Exception e) {
-        }
-
+        capture.startCapture();
     }
 }

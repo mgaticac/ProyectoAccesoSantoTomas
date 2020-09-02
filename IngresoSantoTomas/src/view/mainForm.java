@@ -10,26 +10,13 @@ import com.digitalpersona.onetouch.DPFPFeatureSet;
 import com.digitalpersona.onetouch.DPFPGlobal;
 import com.digitalpersona.onetouch.DPFPSample;
 import com.digitalpersona.onetouch.capture.DPFPCapture;
-import com.digitalpersona.onetouch.capture.DPFPCapturePriority;
-import com.digitalpersona.onetouch.capture.event.DPFPDataEvent;
-import com.digitalpersona.onetouch.capture.event.DPFPDataListener;
-import com.digitalpersona.onetouch.capture.event.DPFPReaderStatusEvent;
-import com.digitalpersona.onetouch.capture.event.DPFPReaderStatusListener;
-import com.digitalpersona.onetouch.capture.event.DPFPSensorEvent;
-import com.digitalpersona.onetouch.capture.event.DPFPSensorListener;
 import com.digitalpersona.onetouch.processing.DPFPEnrollment;
 import com.digitalpersona.onetouch.processing.DPFPImageQualityException;
-import com.digitalpersona.onetouch.readers.DPFPReaderDescription;
-import com.digitalpersona.onetouch.readers.DPFPReadersCollection;
 import java.awt.Dimension;
 import java.awt.Image;
-import java.sql.SQLException;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 import model.Conexion;
 import model.EnrollingListener;
 import model.FPSensorBehivor;
@@ -48,17 +35,13 @@ public class mainForm extends javax.swing.JFrame {
 
     public mainForm() {
         initComponents();
-        IniciarLector();
-        sa = SensorAdministrator.getInstance();
-        sensorId = SensorUtils.getSensorsSerialIds().get(0);
-        enroller = DPFPGlobal.getEnrollmentFactory().createEnrollment();
-        capturer = DPFPGlobal.getCaptureFactory().createCapture();
 
         lblHuella.setPreferredSize(
                 new Dimension(300, 250));
         lblHuella.setBorder(BorderFactory.createLoweredBevelBorder());
-
         //INICIALIZACION DE LISTENERS
+        sa = SensorAdministrator.getInstance();
+        sensorId = SensorUtils.getSensorsSerialIds().get(0);
         //LISTENER PARA VERIFICAR >>>>>>>
         sa.addVerificationListener(
                 new VerificationListener() {
@@ -78,22 +61,24 @@ public class mainForm extends javax.swing.JFrame {
         // <<<<<<< LISTENER PARA VERIFICAR 
 
         //LISTENER PARA ENROLAR >>>>>>>
-        System.out.println("HOLAAA 1");
         sa.addEnrollingListener(
                 new EnrollingListener() {
-            DPFPFeatureSet features;
 
             @Override
             public void enrollingEvent(DPFPSample data
             ) {
                 try {
-                     System.out.println("ENROLLING EVENT STARTED");
-                    features = SensorUtils.getFeatureSet(data, DPFPDataPurpose.DATA_PURPOSE_ENROLLMENT);
+                    
+                    DPFPFeatureSet features = SensorUtils.getFeatureSet(data, DPFPDataPurpose.DATA_PURPOSE_ENROLLMENT);
+                    Image img = CrearImagenHuella(data);
+                    DibujarHuella(img);
                     if (features != null) {
                         stats();
                         try {
+                            
                             //makeReport("The fingerprint feature set was created.");
                             enroller.addFeatures(features);		// Add feature set to template.
+
                         } catch (DPFPImageQualityException ex) {
                         } finally {
 
@@ -113,11 +98,7 @@ public class mainForm extends javax.swing.JFrame {
                                     capturer.startCapture();
                                     break;
                             }
-                            try {
-                                c.ejecutar("INSERT INTO user VALUES(NULL, 'Marcelo Gatica Contreras', '19.387.802-4','36.2',4,'" + features.toString() + "';)");
-                            } catch (SQLException ex) {
-                                Logger.getLogger(mainForm.class.getName()).log(Level.SEVERE, null, ex);
-                            }
+
                         }
                     }
 
@@ -133,23 +114,117 @@ public class mainForm extends javax.swing.JFrame {
     }
 
     private void stats() {
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + enroller.getFeaturesNeeded());
+        System.out.println("ENROLLING EVENT, " + enroller.getFeaturesNeeded() + "finger print left");
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        enrollingFrame = new javax.swing.JFrame();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        lblHuella = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtAreaInformacion = new javax.swing.JTextArea();
+        btnCancelEnrollment = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         btnEnroll = new javax.swing.JButton();
         btnVerify = new javax.swing.JButton();
         btnIdentify = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
-        lblHuella = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txtAreaHuella = new javax.swing.JTextArea();
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblHuella, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblHuella, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Información", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP));
+
+        txtAreaInformacion.setEditable(false);
+        txtAreaInformacion.setColumns(20);
+        txtAreaInformacion.setRows(5);
+        txtAreaInformacion.setFocusable(false);
+        jScrollPane1.setViewportView(txtAreaInformacion);
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
+        );
+
+        btnCancelEnrollment.setText("Cancelar");
+        btnCancelEnrollment.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelEnrollmentActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(220, 220, 220)
+                .addComponent(btnCancelEnrollment, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(227, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnCancelEnrollment)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout enrollingFrameLayout = new javax.swing.GroupLayout(enrollingFrame.getContentPane());
+        enrollingFrame.getContentPane().setLayout(enrollingFrameLayout);
+        enrollingFrameLayout.setHorizontalGroup(
+            enrollingFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        enrollingFrameLayout.setVerticalGroup(
+            enrollingFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(enrollingFrameLayout.createSequentialGroup()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(20, Short.MAX_VALUE))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -175,6 +250,11 @@ public class mainForm extends javax.swing.JFrame {
         });
 
         btnIdentify.setText("Identificar Persona");
+        btnIdentify.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIdentifyActionPerformed(evt);
+            }
+        });
 
         btnExit.setText("Salir");
         btnExit.addActionListener(new java.awt.event.ActionListener() {
@@ -212,44 +292,23 @@ public class mainForm extends javax.swing.JFrame {
                 .addGap(42, 42, 42))
         );
 
-        jPanel3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
-        jPanel3.setFocusable(false);
-
-        lblHuella.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblHuella.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        lblHuella.setFocusable(false);
-        jPanel3.add(lblHuella);
-
-        txtAreaHuella.setEditable(false);
-        txtAreaHuella.setColumns(20);
-        txtAreaHuella.setRows(5);
-        jScrollPane1.setViewportView(txtAreaHuella);
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jScrollPane1)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(13, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 230));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -259,12 +318,16 @@ public class mainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnExitActionPerformed
 
     private void btnEnrollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnrollActionPerformed
+
         FPSensorBehivor enrolling = FPSensorBehivor.ENROLLING;
         sa.changeSensorBehivor(sensorId, enrolling);
 
         System.out.println("ENROLANDO");
-        lblHuella.setText("");
-        txtAreaHuella.setText(txtAreaHuella.getText() + "\n Changing sensor " + sensorId + " to ENROLLING");
+
+        enrollingFrame.setVisible(true);
+        enrollingFrame.setSize(753, 350);
+        enrollingFrame.setResizable(false);
+
     }//GEN-LAST:event_btnEnrollActionPerformed
 
     private void btnVerifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerifyActionPerformed
@@ -273,9 +336,20 @@ public class mainForm extends javax.swing.JFrame {
 
         System.out.println("VALIDANDO");
 
-        lblHuella.setText("");
-        txtAreaHuella.setText(txtAreaHuella.getText() + "\n Changing sensor " + sensorId + " to VALIDATING");
+
     }//GEN-LAST:event_btnVerifyActionPerformed
+
+    private void btnIdentifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIdentifyActionPerformed
+        // SE IDENTIFICARÁ LA PERSONA PARA SU INGRESO A LA ISNITUCION, IMPLEMENTACION FUTURA
+    }//GEN-LAST:event_btnIdentifyActionPerformed
+
+    private void btnCancelEnrollmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelEnrollmentActionPerformed
+        // Cancelar enrolado y volver al menú anterior
+        //programar stop de sensor
+
+        enrollingFrame.setVisible(false);
+
+    }//GEN-LAST:event_btnCancelEnrollmentActionPerformed
 
     public static void main(String args[]) {
 
@@ -291,81 +365,21 @@ public class mainForm extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancelEnrollment;
     private javax.swing.JButton btnEnroll;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnIdentify;
     private javax.swing.JButton btnVerify;
+    private javax.swing.JFrame enrollingFrame;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblHuella;
-    private javax.swing.JTextArea txtAreaHuella;
+    private javax.swing.JTextArea txtAreaInformacion;
     // End of variables declaration//GEN-END:variables
-
-    private void IniciarLector() {
-        DPFPReadersCollection readers = DPFPGlobal.getReadersFactory().getReaders();
-        if (readers == null || readers.isEmpty()) {
-            System.out.println("Sin Lectores!");
-            return;
-        }
-
-        System.out.println("ID de Lectores Disponibles");
-        for (DPFPReaderDescription readerDescription : readers) {
-            //Iniciando lector
-            String idLector = readerDescription.getSerialNumber();
-            System.out.println(readerDescription.getSerialNumber());
-            capturer = DPFPGlobal.getCaptureFactory().createCapture();
-            capturer.setReaderSerialNumber(idLector);
-            capturer.setPriority(DPFPCapturePriority.CAPTURE_PRIORITY_LOW);
-
-            capturer.addDataListener(new DPFPDataListener() {
-                @Override
-                public void dataAcquired(DPFPDataEvent dpfpDataEvent) {
-                    //Se adquiere data
-                    Image img = CrearImagenHuella(dpfpDataEvent.getSample());
-                    DibujarHuella(img);
-                }
-            });
-
-            capturer.addReaderStatusListener(new DPFPReaderStatusListener() {
-                @Override
-                public void readerConnected(DPFPReaderStatusEvent dpfpReaderStatusEvent) {
-                    System.out.println("Reader conectado!");
-                }
-
-                @Override
-                public void readerDisconnected(DPFPReaderStatusEvent dpfpReaderStatusEvent) {
-                    System.out.println("Reader desconectado!");
-                }
-            });
-            capturer.addSensorListener(new DPFPSensorListener() {
-                @Override
-                public void fingerTouched(DPFPSensorEvent dpfpSensorEvent) {
-                    //dedo colocado en sensor
-                }
-
-                @Override
-                public void fingerGone(DPFPSensorEvent dpfpSensorEvent) {
-                    //dedo quitado del sensor
-                }
-
-                @Override
-                public void imageAcquired(DPFPSensorEvent dpfpSensorEvent) {
-
-                }
-            });
-            try {
-                capturer.startCapture();
-
-            } catch (RuntimeException e) {
-                System.out.printf("Failed to start capture. Check that reader is not used by another application.\n");
-                throw e;
-            }
-
-        }
-
-    }
 
     public Image CrearImagenHuella(DPFPSample sample) {
         return DPFPGlobal.getSampleConversionFactory().createImage(sample);
@@ -375,7 +389,6 @@ public class mainForm extends javax.swing.JFrame {
 
         lblHuella.setIcon(new ImageIcon(
                 image.getScaledInstance(lblHuella.getWidth(), lblHuella.getHeight(), Image.SCALE_DEFAULT)));
-
     }
-    
+
 }
