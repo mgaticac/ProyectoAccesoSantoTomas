@@ -35,12 +35,13 @@ public class mainForm extends javax.swing.JFrame {
 
     public mainForm() {
         initComponents();
-
+        sa = SensorAdministrator.getInstance();
+        sa.changeSensorBehivor(sensorId, FPSensorBehivor.NONE);
         lblHuella.setPreferredSize(
                 new Dimension(300, 250));
         lblHuella.setBorder(BorderFactory.createLoweredBevelBorder());
         //INICIALIZACION DE LISTENERS
-        sa = SensorAdministrator.getInstance();
+
         sensorId = SensorUtils.getSensorsSerialIds().get(0);
         //LISTENER PARA VERIFICAR >>>>>>>
         sa.addVerificationListener(
@@ -67,18 +68,19 @@ public class mainForm extends javax.swing.JFrame {
             @Override
             public void enrollingEvent(DPFPSample data
             ) {
+                DPFPFeatureSet features;
                 try {
-                    
-                    DPFPFeatureSet features = SensorUtils.getFeatureSet(data, DPFPDataPurpose.DATA_PURPOSE_ENROLLMENT);
+
+                    features = SensorUtils.getFeatureSet(data, DPFPDataPurpose.DATA_PURPOSE_ENROLLMENT);
                     Image img = CrearImagenHuella(data);
                     DibujarHuella(img);
                     if (features != null) {
                         stats();
                         try {
-                            
+
                             //makeReport("The fingerprint feature set was created.");
                             enroller.addFeatures(features);		// Add feature set to template.
-
+                            System.out.println("features " + enroller.getFeaturesNeeded());
                         } catch (DPFPImageQualityException ex) {
                         } finally {
 

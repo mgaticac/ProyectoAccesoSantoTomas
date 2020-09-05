@@ -102,6 +102,7 @@ public class SensorAdministrator implements SensorFingerListener {
             case ENROLLING:
                 log.info("Sensor " + sensorId + " is try to enrolling");
                 enrolling(sample);
+                System.out.println("asdasdasdasdasdasdasdas");
                 break;
             case VALIDATING:
                 log.info("Sensor " + sensorId + " is try to validate");
