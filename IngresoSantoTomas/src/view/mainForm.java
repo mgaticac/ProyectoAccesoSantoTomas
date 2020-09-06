@@ -9,13 +9,16 @@ import com.digitalpersona.onetouch.DPFPDataPurpose;
 import com.digitalpersona.onetouch.DPFPFeatureSet;
 import com.digitalpersona.onetouch.DPFPGlobal;
 import com.digitalpersona.onetouch.DPFPSample;
-import com.digitalpersona.onetouch.DPFPTemplate;
 import com.digitalpersona.onetouch.capture.DPFPCapture;
 import com.digitalpersona.onetouch.processing.DPFPEnrollment;
 import com.digitalpersona.onetouch.processing.DPFPImageQualityException;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import model.Conexion;
@@ -34,21 +37,19 @@ public class mainForm extends javax.swing.JFrame {
     private DPFPEnrollment enroller;
     private DPFPCapture capturer;
 
-    public mainForm() {
+    public mainForm() throws ClassNotFoundException, SQLException {
 
         initComponents();
         sa = SensorAdministrator.getInstance();
-
+        c = new Conexion("fpdatabase");
         lblHuella.setPreferredSize(new Dimension(300, 250));
         lblHuella.setBorder(BorderFactory.createLoweredBevelBorder());
         sensorId = SensorUtils.getSensorsSerialIds().get(0);
         sa.changeSensorBehivor(sensorId, FPSensorBehivor.NONE);
         //LISTENER PARA VERIFICAR >>>>>>>
-        sa.addVerificationListener(
-                new VerificationListener() {
+        sa.addVerificationListener(new VerificationListener() {
             @Override
-            public void verificationEvent(Optional<FPUser> user
-            ) {
+            public void verificationEvent(Optional<FPUser> user) {
 
                 if (user.isPresent()) {
                     FPUser fpUser = user.get();
@@ -92,8 +93,14 @@ public class mainForm extends javax.swing.JFrame {
                                 switch (enroller.getTemplateStatus()) {
                                     case TEMPLATE_STATUS_READY:	// report success and stop capturing
                                         stats();
-                                        DPFPTemplate template = enroller.getTemplate();
-                                        
+                                        byte[] tmp = enroller.getTemplate().serialize();
+                                        System.out.println();
+
+//                                        try {
+//                                            c.insertHuella("INSERT INTO user VALUES(NULL, 'Marcelo Gatica Contreras', '19.387.802-4','36.2',4," + tmp + ");");
+//                                        } catch (SQLException ex) {
+//                                            Logger.getLogger(mainForm.class.getName()).log(Level.SEVERE, null, ex);
+//                                        }
 //                                        System.out.println("BLOB: " + );
                                         break;
 
@@ -408,7 +415,13 @@ public class mainForm extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new mainForm().setVisible(true);
+                try {
+                    new mainForm().setVisible(true);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(mainForm.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(mainForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
             }
         });

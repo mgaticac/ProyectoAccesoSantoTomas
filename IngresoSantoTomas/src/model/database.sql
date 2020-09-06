@@ -40,7 +40,7 @@ INSERT INTO user_type VALUES(NULL,'personnel',75);
 INSERT INTO user_type VALUES(NULL,'student',100);
 
 --Example user Insert
-INSERT INTO user VALUES(NULL, 'Marcelo Gatica Contreras', '19.387.802-4','36.2',4,1234567890);
+INSERT INTO user VALUES(NULL, 'Marcelo Gatica Contreras', '19.387.802-4','36.2',4,);
 
 --Example History Insert
 INSERT INTO history VALUES(NULL,0,NOW);
