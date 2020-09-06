@@ -5,10 +5,10 @@ import com.digitalpersona.onetouch.DPFPTemplate;
 public class FPUser {
 
     private DPFPTemplate template;
-    private long userId;
+    private int userId;
     private double FAR;
 
-    public FPUser(DPFPTemplate template, long userId, double FAR) {
+    public FPUser(DPFPTemplate template, int userId, double FAR) {
         this.template = template;
         this.userId = userId;
         this.FAR = FAR;
@@ -29,7 +29,7 @@ public class FPUser {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 

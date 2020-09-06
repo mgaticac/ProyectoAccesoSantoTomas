@@ -10,6 +10,8 @@ CREATE TABLE user_type(
     UNIQUE (name)
 );
 
+
+
 CREATE TABLE user (
     id INT AUTO_INCREMENT,
     fullname VARCHAR(100),
@@ -37,13 +39,14 @@ INSERT INTO user_type VALUES(NULL,'admin',0);
 INSERT INTO user_type VALUES(NULL,'technician',25);
 INSERT INTO user_type VALUES(NULL,'provider',50);
 INSERT INTO user_type VALUES(NULL,'personnel',75);
+INSERT INTO user_type VALUES(NULL,'Teacher',85);
 INSERT INTO user_type VALUES(NULL,'student',100);
 
---Example user Insert
-INSERT INTO user VALUES(NULL, 'Marcelo Gatica Contreras', '19.387.802-4','36.2',4,);
+-- Example user Insert
+-- INSERT INTO user VALUES(NULL, 'Marcelo Gatica Contreras', '19.387.802-4','36.2',4,12345);
 
---Example History Insert
-INSERT INTO history VALUES(NULL,0,NOW);
+-- Example History Insert
+-- INSERT INTO history VALUES(NULL,0,NOW);
 
 
 -- SHOW ALL USER HISTORY BY NAME

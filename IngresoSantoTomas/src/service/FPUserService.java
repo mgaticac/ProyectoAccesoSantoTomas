@@ -9,17 +9,16 @@ public class FPUserService {
 
     private List<FPUser> userList;
 
-    public FPUserService(){
+    public FPUserService() {
         userList = new ArrayList<>();
     }
 
-    public void addNewUser(FPUser user){
+    public void addNewUser(FPUser user) {
         userList.add(user);
     }
 
-    public List<FPUser> getAllUsers(){
+    public List<FPUser> getAllUsers() {
         return userList;
     }
-
 
 }

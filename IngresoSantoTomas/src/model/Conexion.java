@@ -1,7 +1,6 @@
 package model;
 
 import com.mysql.jdbc.PreparedStatement;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
@@ -20,7 +19,6 @@ public class Conexion {
         System.out.println(url);
         Class.forName("com.mysql.jdbc.Driver");
         con = DriverManager.getConnection(url);
-
     }
 
     public ResultSet ejecutar(String query) throws SQLException {
@@ -36,26 +34,31 @@ public class Conexion {
         }
 
         return sen.executeQuery(query);
+
     }
 
-    public ResultSet insertHuella(String query) throws SQLException, FileNotFoundException, IOException {
-        FileInputStream input = new FileInputStream("FingerPrint.jpg");
+    public ResultSet insertHuella(String nombre, String rut, String temperatura, int userTypeId, byte[] fingerPrintArray) throws SQLException, FileNotFoundException, IOException {
+        String query = "INSERT INTO user (id, fullname, rut, temperature, user_type_id_fk, finger_print) VALUES (?,?,?,?,?,?);";
         PreparedStatement pstmt = (PreparedStatement) con.prepareStatement(query);
-        pstmt.setString(1, "fprint");
 
-        pstmt.setBinaryStream(6, input, input.available());
+        pstmt.setObject(1, null);
+        pstmt.setString(2, nombre);
+        pstmt.setString(3, rut);
+        pstmt.setString(4, temperatura);
+        pstmt.setInt(5, userTypeId);
+        pstmt.setBytes(6, fingerPrintArray);
 
-        System.out.println(query);
+        System.out.println(pstmt.getPreparedSql());
 
         if (query.toLowerCase().startsWith("insert")
                 || query.toLowerCase().startsWith("update")
                 || query.toLowerCase().startsWith("delete")) {
-            pstmt.executeUpdate(query);
+            pstmt.execute();
             close();
             return null;
         }
-
-        return pstmt.executeQuery(query);
+        System.out.println(pstmt.asSql());
+        return null;
     }
 
     public void close() throws SQLException {
@@ -63,7 +66,6 @@ public class Conexion {
     }
 
     public Connection getCon() {
-
         return con;
     }
 
