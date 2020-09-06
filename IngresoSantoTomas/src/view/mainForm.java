@@ -9,6 +9,7 @@ import com.digitalpersona.onetouch.DPFPDataPurpose;
 import com.digitalpersona.onetouch.DPFPFeatureSet;
 import com.digitalpersona.onetouch.DPFPGlobal;
 import com.digitalpersona.onetouch.DPFPSample;
+import com.digitalpersona.onetouch.DPFPTemplate;
 import com.digitalpersona.onetouch.capture.DPFPCapture;
 import com.digitalpersona.onetouch.processing.DPFPEnrollment;
 import com.digitalpersona.onetouch.processing.DPFPImageQualityException;
@@ -34,15 +35,14 @@ public class mainForm extends javax.swing.JFrame {
     private DPFPCapture capturer;
 
     public mainForm() {
+
         initComponents();
         sa = SensorAdministrator.getInstance();
-        sa.changeSensorBehivor(sensorId, FPSensorBehivor.NONE);
-        lblHuella.setPreferredSize(
-                new Dimension(300, 250));
-        lblHuella.setBorder(BorderFactory.createLoweredBevelBorder());
-        //INICIALIZACION DE LISTENERS
 
+        lblHuella.setPreferredSize(new Dimension(300, 250));
+        lblHuella.setBorder(BorderFactory.createLoweredBevelBorder());
         sensorId = SensorUtils.getSensorsSerialIds().get(0);
+        sa.changeSensorBehivor(sensorId, FPSensorBehivor.NONE);
         //LISTENER PARA VERIFICAR >>>>>>>
         sa.addVerificationListener(
                 new VerificationListener() {
@@ -66,46 +66,51 @@ public class mainForm extends javax.swing.JFrame {
                 new EnrollingListener() {
 
             @Override
-            public void enrollingEvent(DPFPSample data
-            ) {
+            public void enrollingEvent(DPFPSample data) {
+
                 DPFPFeatureSet features;
-                try {
 
-                    features = SensorUtils.getFeatureSet(data, DPFPDataPurpose.DATA_PURPOSE_ENROLLMENT);
-                    Image img = CrearImagenHuella(data);
-                    DibujarHuella(img);
-                    if (features != null) {
-                        stats();
-                        try {
+                if (enroller.getFeaturesNeeded() > 0) {
+                    try {
 
-                            //makeReport("The fingerprint feature set was created.");
-                            enroller.addFeatures(features);		// Add feature set to template.
-                            System.out.println("features " + enroller.getFeaturesNeeded());
-                        } catch (DPFPImageQualityException ex) {
-                        } finally {
+                        features = SensorUtils.getFeatureSet(data, DPFPDataPurpose.DATA_PURPOSE_ENROLLMENT);
+                        Image img = CrearImagenHuella(data);
+                        DibujarHuella(img);
 
-                            // Check if template has been created.
-                            switch (enroller.getTemplateStatus()) {
-                                case TEMPLATE_STATUS_READY:	// report success and stop capturing
-                                    stats();
-                                    //((MainForm) getOwner()).setTemplate(enroller.getTemplate());
-                                    //setPrompt("Click Close, and then click Fingerprint Verification.");
-                                    break;
+                        if (features != null) {
+                            stats();
+                            try {
 
-                                case TEMPLATE_STATUS_FAILED:	// report failure and restart capturing
-                                    enroller.clear();
-                                    capturer.stopCapture();
-                                    stats();
-                                    //((MainForm) getOwner()).setTemplate(null);
-                                    capturer.startCapture();
-                                    break;
+                                //makeReport("The fingerprint feature set was created.");
+                                enroller.addFeatures(features);		// Add feature set to template.
+                                System.out.println("features " + enroller.getFeaturesNeeded());
+                                System.out.println("Enroller status" + enroller.getTemplateStatus());
+                            } catch (DPFPImageQualityException ex) {
+                            } finally {
+
+                                // Check if template has been created.
+                                switch (enroller.getTemplateStatus()) {
+                                    case TEMPLATE_STATUS_READY:	// report success and stop capturing
+                                        stats();
+                                        DPFPTemplate template = enroller.getTemplate();
+                                        
+//                                        System.out.println("BLOB: " + );
+                                        break;
+
+                                    case TEMPLATE_STATUS_FAILED:	// report failure and restart capturing
+                                        enroller.clear();
+                                        capturer.stopCapture();
+                                        stats();
+                                        capturer.startCapture();
+                                        break;
+                                }
+
                             }
-
                         }
-                    }
 
-                } catch (DPFPImageQualityException e) {
-                    e.printStackTrace();
+                    } catch (DPFPImageQualityException e) {
+                        e.printStackTrace();
+                    }
                 }
 
             }
@@ -117,6 +122,7 @@ public class mainForm extends javax.swing.JFrame {
 
     private void stats() {
         System.out.println("ENROLLING EVENT, " + enroller.getFeaturesNeeded() + "finger print left");
+        System.out.println("status: " + enroller.getTemplateStatus());
     }
 
     @SuppressWarnings("unchecked")
@@ -131,6 +137,10 @@ public class mainForm extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         txtAreaInformacion = new javax.swing.JTextArea();
         btnCancelEnrollment = new javax.swing.JButton();
+        VerifyFrame = new javax.swing.JFrame();
+        jPanel6 = new javax.swing.JPanel();
+        btnCloseVerify = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         btnEnroll = new javax.swing.JButton();
@@ -228,6 +238,44 @@ public class mainForm extends javax.swing.JFrame {
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
+        btnCloseVerify.setText("Cerrar");
+
+        jLabel1.setFont(new java.awt.Font("Sylfaen", 1, 18)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("-");
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap(176, Short.MAX_VALUE)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnCloseVerify, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(161, 161, 161))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addGap(101, 101, 101)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
+                .addComponent(btnCloseVerify)
+                .addGap(52, 52, 52))
+        );
+
+        javax.swing.GroupLayout VerifyFrameLayout = new javax.swing.GroupLayout(VerifyFrame.getContentPane());
+        VerifyFrame.getContentPane().setLayout(VerifyFrameLayout);
+        VerifyFrameLayout.setHorizontalGroup(
+            VerifyFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        VerifyFrameLayout.setVerticalGroup(
+            VerifyFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -322,6 +370,7 @@ public class mainForm extends javax.swing.JFrame {
     private void btnEnrollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnrollActionPerformed
 
         FPSensorBehivor enrolling = FPSensorBehivor.ENROLLING;
+        enroller = DPFPGlobal.getEnrollmentFactory().createEnrollment();
         sa.changeSensorBehivor(sensorId, enrolling);
 
         System.out.println("ENROLANDO");
@@ -342,11 +391,12 @@ public class mainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVerifyActionPerformed
 
     private void btnIdentifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIdentifyActionPerformed
-        // SE IDENTIFICARÁ LA PERSONA PARA SU INGRESO A LA ISNITUCION, IMPLEMENTACION FUTURA
+        // SE IDENTIFICARÁ LA PERSONA PARA SU INGRESO A LA INSTITUCION, IMPLEMENTACION FUTURA
     }//GEN-LAST:event_btnIdentifyActionPerformed
 
     private void btnCancelEnrollmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelEnrollmentActionPerformed
         // Cancelar enrolado y volver al menú anterior
+        sa.changeSensorBehivor(sensorId, FPSensorBehivor.NONE);
         //programar stop de sensor
 
         enrollingFrame.setVisible(false);
@@ -367,17 +417,21 @@ public class mainForm extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JFrame VerifyFrame;
     private javax.swing.JButton btnCancelEnrollment;
+    private javax.swing.JButton btnCloseVerify;
     private javax.swing.JButton btnEnroll;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnIdentify;
     private javax.swing.JButton btnVerify;
     private javax.swing.JFrame enrollingFrame;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblHuella;
     private javax.swing.JTextArea txtAreaInformacion;
