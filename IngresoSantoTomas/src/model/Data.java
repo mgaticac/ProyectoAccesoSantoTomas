@@ -1,5 +1,6 @@
 package model;
 
+import com.digitalpersona.onetouch.DPFPGlobal;
 import com.digitalpersona.onetouch.DPFPTemplate;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,29 +9,26 @@ import java.util.List;
 
 public class Data {
 
-    private Conexion c;
-    private ResultSet rs;
-    private FPUser fPUser;
-
-    public List<FPUser> getUsuarios() throws ClassNotFoundException, SQLException {
-        c = new Conexion("fpdatabase");
-        rs = c.ejecutar("SELECT * FROM user;");
-        fPUser = new FPUser();
+    public List<FPUser> getAllUsers() throws ClassNotFoundException, SQLException {
+        Conexion c = new Conexion("fpdatabase");
+        ResultSet rs = c.ejecutar("SELECT * FROM user;");
+        FPUser fpu;
 
         List<FPUser> userList = new ArrayList<>();
 
-        byte[] fp;
-        DPFPTemplate tmp;
         while (rs.next()) {
-            fPUser.setUserId(rs.getInt(0));
-            fp = rs.getBytes(1);
+            fpu = new FPUser();
+            fpu.setUserId(rs.getInt(1));
+            System.out.println("ID:" + fpu.getUserId());
+            DPFPTemplate tmp = DPFPGlobal.getTemplateFactory().createTemplate(rs.getBytes(5));
+            fpu.setTemplate(tmp);
+            System.out.println("template: " + fpu.getTemplate());
 
-//            fPUser.setTemplate();
-            userList.add(fPUser);
+            userList.add(fpu);
 
         }
-
         return userList;
+
     }
 
 }

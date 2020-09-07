@@ -6,11 +6,15 @@ import com.digitalpersona.onetouch.DPFPFeatureSet;
 import com.digitalpersona.onetouch.DPFPGlobal;
 import com.digitalpersona.onetouch.verification.DPFPVerification;
 import com.digitalpersona.onetouch.verification.DPFPVerificationResult;
+import java.sql.SQLException;
 
 import java.util.*;
 import java.util.logging.Logger;
+import model.Data;
 
 public class FPSensorVerificationService {
+
+    List<FPUser> userList = new ArrayList<>();
 
     public static Logger log = Logger.getLogger(FPSensor.class.getName());
 
@@ -20,10 +24,18 @@ public class FPSensorVerificationService {
         this.fpUserService = userService;
     }
 
-    public Optional<FPUser> verify(DPFPFeatureSet featureSet) {
+    public Optional<FPUser> verify(DPFPFeatureSet featureSet) throws ClassNotFoundException, SQLException {
+
         DPFPVerification matcher = DPFPGlobal.getVerificationFactory().createVerification();
-        matcher.setFARRequested(DPFPVerification.MEDIUM_SECURITY_FAR);
+        matcher.setFARRequested(DPFPVerification.LOW_SECURITY_FAR);
         Map<FPUser, DPFPVerificationResult> trueVerificationsResults = new HashMap<>();
+        
+        Data d = new Data();
+        for (FPUser user : d.getAllUsers()) {
+            fpUserService.addNewUser(user);
+        }
+        
+        
         fpUserService.getAllUsers().forEach(fpUser -> {
             DPFPVerificationResult verify = matcher.verify(featureSet, fpUser.getTemplate());
             if (verify.isVerified()) {
@@ -63,4 +75,5 @@ public class FPSensorVerificationService {
         }
         return Optional.empty();
     }
+
 }

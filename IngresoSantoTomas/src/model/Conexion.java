@@ -1,8 +1,10 @@
 package model;
 
+import com.digitalpersona.onetouch.DPFPTemplate;
 import com.mysql.jdbc.PreparedStatement;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.DriverManager;
@@ -57,7 +59,9 @@ public class Conexion {
             close();
             return null;
         }
-        System.out.println(pstmt.asSql());
+
+        System.out.println(pstmt.toString());
+
         return null;
     }
 

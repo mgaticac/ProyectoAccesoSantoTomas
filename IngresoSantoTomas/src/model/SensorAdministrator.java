@@ -7,9 +7,11 @@ import com.digitalpersona.onetouch.DPFPDataPurpose;
 import com.digitalpersona.onetouch.DPFPFeatureSet;
 import com.digitalpersona.onetouch.DPFPSample;
 import com.digitalpersona.onetouch.processing.DPFPImageQualityException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SensorAdministrator implements SensorFingerListener {
@@ -105,14 +107,22 @@ public class SensorAdministrator implements SensorFingerListener {
                 break;
             case VALIDATING:
                 log.info("Sensor " + sensorId + " is try to validate");
-                validating(sample);
+                 {
+                    try {
+                        validating(sample);
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(SensorAdministrator.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(SensorAdministrator.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
                 break;
             case NONE:
                 log.warning("Sensor " + sensorId + " is in NONE status");
         }
     }
 
-    private void validating(DPFPSample sample) {
+    private void validating(DPFPSample sample) throws ClassNotFoundException, SQLException {
         try {
             DPFPFeatureSet featureSet = SensorUtils.getFeatureSet(sample, DPFPDataPurpose.DATA_PURPOSE_VERIFICATION);
             Optional<FPUser> verify = verificationService.verify(featureSet);
