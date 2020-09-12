@@ -9,6 +9,7 @@ import com.digitalpersona.onetouch.DPFPDataPurpose;
 import com.digitalpersona.onetouch.DPFPFeatureSet;
 import com.digitalpersona.onetouch.DPFPGlobal;
 import com.digitalpersona.onetouch.DPFPSample;
+import com.digitalpersona.onetouch.DPFPTemplate;
 import com.digitalpersona.onetouch.capture.DPFPCapture;
 import com.digitalpersona.onetouch.processing.DPFPEnrollment;
 import com.digitalpersona.onetouch.processing.DPFPImageQualityException;
@@ -18,115 +19,151 @@ import java.awt.Image;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import model.Conexion;
-import model.Data;
+import database.Conexion;
+import database.Data;
+import database.dao.UserDao;
+import database.dao.impl.UserDaoImpl;
+import database.model.DBUser;
 import model.EnrollingListener;
 import model.FPSensorBehivor;
 import model.FPUser;
 import model.SensorAdministrator;
+import model.VerificationListener;
 import service.FPSensorVerificationService;
 import service.FPUserService;
 import util.SensorUtils;
 
-public class mainForm extends javax.swing.JFrame {
+public class mainForm extends javax.swing.JFrame implements EnrollingListener, VerificationListener {
 
-    private Conexion c;
-    private Data d;
-    private SensorAdministrator sa;
-    private String sensorId;
-    private DPFPEnrollment enroller;
-    private DPFPCapture capturer;
-    private SensorUtils su;
-    private String nombre;
-    private String rut;
-    private String temperatura;
-    private int userTypeId;
-    private List<FPUser> listaUsuarios;
+    //LOGGER SETUP
+    private final static Logger log;
+
+    static {
+        System.setProperty("java.util.logging.SimpleFormatter.format",
+                "[%1$tF %1$tT] [%4$-7s] [%2$-45s] %5$s %n");
+        log = Logger.getLogger(mainForm.class.getName());
+    }
+
+    private String sensorId; // ?? pueden existir mas de 1 sensor
+    private DPFPEnrollment enroller;// NO KCHO
+    private DPFPCapture capturer; // X2
+    private SensorUtils su; // esta clase tiene metodos estaticos no es necesaria declararla
+    private String nombre;// ??
+    private String rut;// ??
+    private String temperatura; // ??
+    private int userTypeId; // ?????????????
+
+    //DATA
+    private Conexion connection;
+    private Data data;
+
+    //DAO
+    private UserDao userDao;
+
+    //SERVICES    
+    private FPUserService userService;
+    private SensorAdministrator sensorAdministrator;
+    private FPSensorVerificationService verificationService;
 
     public mainForm() throws ClassNotFoundException, SQLException {
-
+        // GUI
         initComponents();
-        sa = SensorAdministrator.getInstance();
-        c = new Conexion("fpdatabase");
         lblHuella.setPreferredSize(new Dimension(300, 250));
         lblHuella.setBorder(BorderFactory.createLoweredBevelBorder());
-        sensorId = SensorUtils.getSensorsSerialIds().get(0);
-        sa.changeSensorBehivor(sensorId, FPSensorBehivor.NONE);
-        //LISTENER PARA VERIFICAR >>>>>>>
 
-        // <<<<<<< LISTENER PARA VERIFICAR 
-        //LISTENER PARA ENROLAR >>>>>>>
-        sa.addEnrollingListener(
-                new EnrollingListener() {
+        // VALUES
+        sensorId = SensorUtils.getSensorsSerialIds().get(0); // FIXME: eston pueden ser varios sensores 
 
-            @Override
-            public void enrollingEvent(DPFPSample data) {
+        // DATA
+        connection = new Conexion("fpdatabase");
+        data = new Data(connection);
 
-                DPFPFeatureSet features;
+        //DAO
+        userDao = new UserDaoImpl(connection);
 
-                if (enroller.getFeaturesNeeded() > 0) {
+        // SERVICES
+        sensorAdministrator = new SensorAdministrator(userDao); // admin contains all services
+        userService = sensorAdministrator.getUserService();
+        verificationService = sensorAdministrator.getVerificationService();
+
+        // BEHAVIOR
+        sensorAdministrator.changeSensorBehivor(sensorId, FPSensorBehivor.NONE);
+        sensorAdministrator.addEnrollingListener(this::enrollingEvent);
+        sensorAdministrator.addVerificationListener(this::verificationEvent);
+    }
+
+    @Override
+    public void verificationEvent(Optional<FPUser> user) {
+        if (user.isPresent()) {
+            FPUser fpUser = user.get();
+            Optional<DBUser> userById = userDao.getUserById((int) fpUser.getUserId());
+            if (userById.isPresent()) {
+                DBUser dbUser = userById.get();
+                userVerificated(dbUser);                
+            } else {
+                log.severe("USER MISSMATCH:" + fpUser + " NOT FOUNDED IN DB!");
+            }
+        } else {
+            log.info("used not founded");
+        }
+    }
+    
+    private void userVerificated(DBUser user){
+        log.info("USER DETECTED!:" + user);
+        
+        // code....
+    }
+
+    @Override
+    public void enrollingEvent(DPFPSample data) {
+        DPFPFeatureSet features;
+        if (enroller.getFeaturesNeeded() > 0) { // FIXME: falta mostrar cuantos registros quedan restantes en la UI
+            try {
+                features = SensorUtils.getFeatureSet(data, DPFPDataPurpose.DATA_PURPOSE_ENROLLMENT);
+                Image img = crearImagenHuella(data);
+                dibujarHuella(img);
+
+                if (features != null) {
                     try {
+                        //makeReport("The fingerprint feature set was created.");
+                        enroller.addFeatures(features);
+                        System.out.println("features " + enroller.getFeaturesNeeded());
+                        System.out.println("Enroller status" + enroller.getTemplateStatus());
 
-                        features = SensorUtils.getFeatureSet(data, DPFPDataPurpose.DATA_PURPOSE_ENROLLMENT);
-                        Image img = crearImagenHuella(data);
-                        dibujarHuella(img);
+                    } catch (DPFPImageQualityException ex) {
+                    } finally {
 
-                        if (features != null) {
-                            try {
-
-                                //makeReport("The fingerprint feature set was created.");
-                                enroller.addFeatures(features);		// Add feature set to template.
-                                System.out.println("features " + enroller.getFeaturesNeeded());
-                                System.out.println("Enroller status" + enroller.getTemplateStatus());
-
-                            } catch (DPFPImageQualityException ex) {
-                            } finally {
-
-                                // Check if template has been created.
-                                switch (enroller.getTemplateStatus()) {
-                                    case TEMPLATE_STATUS_READY:	// report success and stop capturing
-                                        stats();
-
-                                         {
-                                            try {
-
-                                                c.insertHuella(nombre, rut, temperatura, userTypeId, enroller.getTemplate().serialize());
-
-                                            } catch (SQLException ex) {
-                                                Logger.getLogger(mainForm.class.getName()).log(Level.SEVERE, null, ex);
-                                            } catch (IOException ex) {
-                                                Logger.getLogger(mainForm.class.getName()).log(Level.SEVERE, null, ex);
-                                            }
-                                        }
-                                        enroller.clear();
-                                        capturer.stopCapture();
-                                        break;
-
-                                    case TEMPLATE_STATUS_FAILED:	// report failure and restart capturing
-                                        enroller.clear();
-                                        capturer.stopCapture();
-                                        capturer.startCapture();
-                                        break;
+                        switch (enroller.getTemplateStatus()) {
+                            case TEMPLATE_STATUS_READY:
+                                stats();
+                                 {
+                                    DPFPTemplate template = enroller.getTemplate();
+                                    DBUser dbUser = new DBUser(nombre, rut, temperatura, userTypeId, template.serialize());
+                                    userDao.add(dbUser);
                                 }
+                                enroller.clear();
+                                capturer.stopCapture();
+                                break;
 
-                            }
+                            case TEMPLATE_STATUS_FAILED:
+                                enroller.clear();
+                                capturer.stopCapture();
+                                capturer.startCapture();
+                                break;
                         }
-                        stats();
-
-                    } catch (DPFPImageQualityException e) {
-                        e.printStackTrace();
                     }
                 }
+                stats();
 
+            } catch (DPFPImageQualityException e) {
+                e.printStackTrace();
             }
         }
-        );
-        // <<<<<<< LISTENER PARA ENROLAR 
-
     }
 
     private void stats() {
@@ -459,29 +496,9 @@ public class mainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEnrollWindowActionPerformed
 
     private void btnVerifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerifyActionPerformed
-        try {
 
-            FPSensorBehivor validating = FPSensorBehivor.VALIDATING;
-            sa.changeSensorBehivor(sensorId, validating);
-            System.out.println("VALIDANDO");
-            d = new Data();
-            DPFPFeatureSet verification;
-            List<FPUser> fPUsers = d.getAllUsers();
-            byte[] userFS = null;
-            FPSensorVerificationService fpsvs = new FPSensorVerificationService(new FPUserService());
-
-            for (FPUser fPUser : fPUsers) {
-                userFS = fPUser.getTemplate().serialize();
-                verification = DPFPGlobal.getFeatureSetFactory().createFeatureSet(userFS);
-                fpsvs.verify(verification);
-            }
-
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(mainForm.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(mainForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+        userService.retriveUserListFromDatabase(); // hace el select y obtiene todos los usuarios internamente
+        sensorAdministrator.changeSensorBehivor(sensorId, FPSensorBehivor.VALIDATING);
 
     }//GEN-LAST:event_btnVerifyActionPerformed
 
@@ -491,7 +508,7 @@ public class mainForm extends javax.swing.JFrame {
 
     private void btnCancelEnrollmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelEnrollmentActionPerformed
         // Cancelar enrolado y volver al menú anterior
-        sa.changeSensorBehivor(sensorId, FPSensorBehivor.NONE);
+        sensorAdministrator.changeSensorBehivor(sensorId, FPSensorBehivor.NONE);
         //programar stop de sensor
 
         enrollingFrame.setVisible(false);
@@ -502,7 +519,7 @@ public class mainForm extends javax.swing.JFrame {
 
         FPSensorBehivor enrolling = FPSensorBehivor.ENROLLING;
         enroller = DPFPGlobal.getEnrollmentFactory().createEnrollment();
-        sa.changeSensorBehivor(sensorId, enrolling);
+        sensorAdministrator.changeSensorBehivor(sensorId, enrolling);
 
         System.out.println("ENROLANDO");
 
@@ -520,7 +537,7 @@ public class mainForm extends javax.swing.JFrame {
     Personal
     Proveedor
          */
-        switch (cbUserType.getItemAt(cbUserType.getSelectedIndex())) {
+        switch (cbUserType.getItemAt(cbUserType.getSelectedIndex())) { // FIXME: esto no puede estar hardcodeado
 
             case "Estudiante":
                 userTypeId = 6;

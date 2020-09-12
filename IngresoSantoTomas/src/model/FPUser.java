@@ -17,6 +17,11 @@ public class FPUser {
     public FPUser() {
     }
 
+    public FPUser(DPFPTemplate template, int userId) {
+        this.template = template;
+        this.userId = userId;
+    }
+
     public DPFPTemplate getTemplate() {
         return template;
     }
@@ -40,4 +45,10 @@ public class FPUser {
     public void setFAR(double FAR) {
         this.FAR = FAR;
     }
+
+    @Override
+    public String toString() {
+        return "FPUser{" + "template=" + template + ", userId=" + userId + ", FAR=" + FAR + '}';
+    }
+
 }

@@ -7,6 +7,7 @@ import com.digitalpersona.onetouch.DPFPDataPurpose;
 import com.digitalpersona.onetouch.DPFPFeatureSet;
 import com.digitalpersona.onetouch.DPFPSample;
 import com.digitalpersona.onetouch.processing.DPFPImageQualityException;
+import database.dao.UserDao;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +24,13 @@ public class SensorAdministrator implements SensorFingerListener {
 
     private FPUserService userService;
     private FPSensorVerificationService verificationService;
-    private List<VerificationListener> verificationListeners;
 
-    public SensorAdministrator() {
-        userService = new FPUserService();
+    private List<VerificationListener> verificationListeners;
+    private UserDao userDao;
+
+    public SensorAdministrator(UserDao userDao) {
+        this.userDao = userDao;
+        userService = new FPUserService(this.userDao);
         verificationService = new FPSensorVerificationService(userService);
 
         FPSensor.defaultBehivor = FPSensorBehivor.VALIDATING;
@@ -42,6 +46,14 @@ public class SensorAdministrator implements SensorFingerListener {
         if (sensorsSerialIds.isEmpty()) {
             log.warning("No sensors Detected");
         }
+    }
+
+    public FPUserService getUserService() {
+        return userService;
+    }
+
+    public FPSensorVerificationService getVerificationService() {
+        return verificationService;
     }
 
     public void changeSensorBehivor(String sensorSerialId, FPSensorBehivor behivor) {
@@ -64,13 +76,6 @@ public class SensorAdministrator implements SensorFingerListener {
         if (verificationListeners != null) {
             verificationListeners.remove(verificationListener);
         }
-    }
-
-    public static SensorAdministrator getInstance() {
-        if (instance == null) {
-            instance = new SensorAdministrator();
-        }
-        return instance;
     }
 
     public void addEnrollingListener(EnrollingListener listener) {

@@ -9,15 +9,16 @@ import com.digitalpersona.onetouch.verification.DPFPVerificationResult;
 import java.sql.SQLException;
 
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Data;
 
 public class FPSensorVerificationService {
 
-    List<FPUser> userList = new ArrayList<>();
+    public final static Logger log = Logger.getLogger(FPSensor.class.getName());
 
-    public static Logger log = Logger.getLogger(FPSensor.class.getName());
-
+    static {
+        log.setLevel(Level.FINEST); // nivel de logging
+    }
     private FPUserService fpUserService;
 
     public FPSensorVerificationService(FPUserService userService) {
@@ -27,23 +28,21 @@ public class FPSensorVerificationService {
     public Optional<FPUser> verify(DPFPFeatureSet featureSet) throws ClassNotFoundException, SQLException {
 
         DPFPVerification matcher = DPFPGlobal.getVerificationFactory().createVerification();
-        matcher.setFARRequested(DPFPVerification.LOW_SECURITY_FAR);
+        matcher.setFARRequested(DPFPVerification.MEDIUM_SECURITY_FAR);
         Map<FPUser, DPFPVerificationResult> trueVerificationsResults = new HashMap<>();
-        
-        Data d = new Data();
-        for (FPUser user : d.getAllUsers()) {
-            fpUserService.addNewUser(user);
-        }
-        
-        
-        fpUserService.getAllUsers().forEach(fpUser -> {
+
+        log.info("Verifying user in user database...");
+        for (FPUser fpUser : fpUserService.getAllUsers()) {
             DPFPVerificationResult verify = matcher.verify(featureSet, fpUser.getTemplate());
+            log.info("Verified user id: '" + fpUser.getUserId() + "'\tFalse accept Rate: '" + verify.getFalseAcceptRate() + "'");
+
             if (verify.isVerified()) {
                 double FAR = (double) verify.getFalseAcceptRate() / DPFPVerification.PROBABILITY_ONE;
                 fpUser.setFAR(FAR);
                 trueVerificationsResults.put(fpUser, verify);
             }
-        });
+        }
+
         if (trueVerificationsResults.isEmpty()) {
             log.info("No users match");
             return Optional.empty();
@@ -54,8 +53,8 @@ public class FPSensorVerificationService {
                     .findFirst()
                     .get()
                     .getKey();
-            log.info("User matchs " + key.getUserId());
-            Optional.of(key);
+            log.info("User match: " + key);
+            return Optional.of(key);
         } else {
             log.warning("More than 1 user founded! -> Adjust your match FAR requested");
             int i = 0;
@@ -71,9 +70,9 @@ public class FPSensorVerificationService {
                 }
                 i++;
             }
+            log.info("Returning user min FAR user:" + minUser);
             return Optional.of(minUser);
         }
-        return Optional.empty();
     }
 
 }

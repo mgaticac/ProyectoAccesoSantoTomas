@@ -11,7 +11,6 @@ CREATE TABLE user_type(
 );
 
 
-
 CREATE TABLE user (
     id INT AUTO_INCREMENT,
     fullname VARCHAR(100),
