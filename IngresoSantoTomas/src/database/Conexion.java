@@ -1,10 +1,8 @@
 package database;
 
-import com.digitalpersona.onetouch.DPFPTemplate;
 import java.sql.PreparedStatement;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.DriverManager;
@@ -13,12 +11,13 @@ import java.sql.Statement;
 import java.util.logging.Logger;
 
 public class Conexion {
+
     public static Logger log = Logger.getLogger(Conexion.class.getName());
     private Statement sen;
     private Connection con;
 
     public Conexion(String bd) throws ClassNotFoundException, SQLException {
-        String url = "jdbc:mysql://localhost/" + bd + "?user=root&password=";
+        String url = "jdbc:mysql://localhost/" + bd + "?user=root&password=Olakease123";
         log.info("Conecction url string:" + url);
         Class.forName("com.mysql.jdbc.Driver");
         con = DriverManager.getConnection(url);

@@ -16,7 +16,7 @@ public class FPSensor implements DPFPDataListener, Runnable {
 
     public static Logger log = Logger.getLogger(FPSensor.class.getName());
 
-    public static FPSensorBehivor defaultBehivor = FPSensorBehivor.NONE;
+    public static FPSensorBehivor defaultBehivor = FPSensorBehivor.VALIDATING;
 
     private String serialId;
     private DPFPCapture capture;
@@ -24,6 +24,10 @@ public class FPSensor implements DPFPDataListener, Runnable {
     private FPSensorBehivor behivor;
     private List<SensorFingerListener> listeners;
     private int lastStatus;
+
+    public FPSensorBehivor getBehivor() {
+        return behivor;
+    }
 
     public FPSensor(String serialId) {
         this.serialId = serialId;

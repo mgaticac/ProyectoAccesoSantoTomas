@@ -13,20 +13,19 @@ import model.FPUser;
 
 public class Data {
 
-    
     public static Logger log = Logger.getLogger(Data.class.getName());
     private Conexion c;
-    
-    public Data(Conexion con){
+
+    public Data(Conexion con) {
         this.c = con;
         log.setLevel(Level.ALL);
     }
-    
+
     public List<FPUser> getAllUsers() throws ClassNotFoundException, SQLException {
-        
+
         List<FPUser> userList = new ArrayList<>();
         ResultSet rs = c.ejecutar("SELECT * FROM user;");
-        
+
         while (rs.next()) {
             FPUser fpu = new FPUser();
             fpu.setUserId(rs.getInt("id"));
@@ -36,8 +35,7 @@ public class Data {
                 DPFPTemplate tmp = DPFPGlobal.getTemplateFactory().createTemplate(bytes);
                 fpu.setTemplate(tmp);
             }
-            
-            
+
             log.info("ID:" + fpu.getUserId());
             log.info("template: " + fpu.getTemplate());
             userList.add(fpu);
@@ -45,6 +43,18 @@ public class Data {
         }
         return userList;
 
+    }
+
+    public List<FPUser> getUserIdByRut(String rut) throws SQLException {
+        List<FPUser> userIdList = new ArrayList<>();
+        ResultSet rs = c.ejecutar("SELECT id from user WHERE rut LIKE '" + rut + "';");
+        while (rs.next()) {
+            FPUser fpu = new FPUser();
+            fpu.setUserId(rs.getInt("id"));
+            userIdList.add(fpu);
+        }
+        System.out.println("HOLA");
+        return userIdList;
     }
 
 }

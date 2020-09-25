@@ -5,11 +5,7 @@
  */
 package database.dao.impl;
 
-import com.digitalpersona.onetouch.DPFPGlobal;
-import com.digitalpersona.onetouch.DPFPTemplate;
 import database.Conexion;
-import static database.Conexion.log;
-import static database.Data.log;
 import database.dao.UserDao;
 import database.model.DBSede;
 import database.model.DBUser;
@@ -22,7 +18,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.FPUser;
 
 public class UserDaoImpl implements UserDao {
 
@@ -42,16 +37,12 @@ public class UserDaoImpl implements UserDao {
 
                 int id = rs.getInt("id");
                 String fullname = rs.getString("fullname");
-                String temperature = rs.getString("temperature");
                 String rut = rs.getString("rut");
                 int usetType = rs.getInt("user_type_id_fk");
                 byte[] fingerPrint = rs.getBytes("finger_print");
 
-                DBUser user = new DBUser(id, fullname, rut, temperature, usetType, fingerPrint);
+                DBUser user = new DBUser(id, fullname, rut, usetType, fingerPrint);
 
-                //System.out.println("bytes:" + bytes.toString());
-                //DPFPTemplate tmp = DPFPGlobal.getTemplateFactory().createTemplate(bytes);
-                //user.setTemplate(tmp);
                 userList.add(user);
 
             }
@@ -64,15 +55,14 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void add(DBUser t) {
-        String query = "INSERT INTO user (id, fullname, rut, temperature, user_type_id_fk, finger_print) VALUES (?,?,?,?,?,?);";
+        String query = "INSERT INTO user (id, fullname, rut, user_type_id_fk, finger_print) VALUES (?,?,?,?,?);";
         try {
             PreparedStatement pstmt = (PreparedStatement) con.getCon().prepareStatement(query);
             pstmt.setObject(1, null);
             pstmt.setString(2, t.getFullname());
             pstmt.setString(3, t.getRut());
-            pstmt.setString(4, t.getTemperature());
-            pstmt.setInt(5, t.getUserTypeIdFk());
-            pstmt.setBytes(6, t.getFingerPrint());
+            pstmt.setInt(4, t.getUserTypeIdFk());
+            pstmt.setBytes(5, t.getFingerPrint());
             if (query.toLowerCase().startsWith("insert")
                     || query.toLowerCase().startsWith("update")
                     || query.toLowerCase().startsWith("delete")) {
@@ -93,15 +83,14 @@ public class UserDaoImpl implements UserDao {
             PreparedStatement pstmt = (PreparedStatement) con.getCon().prepareStatement(sql);
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 int uid = rs.getInt("id");
                 String fullName = rs.getString("fullname");
                 String rut = rs.getString("rut");
-                String temperature = rs.getString("temperature");
                 int userTipeIdFk = rs.getInt("user_type_id_fk");
                 byte[] fingerPrint = rs.getBytes("finger_print");
                 //(int id, String fullname, String rut, String temperature, int userTypeIdFk, byte[] fingerPrint) {
-                DBUser user = new DBUser(uid,fullName,rut,temperature,userTipeIdFk,fingerPrint);
+                DBUser user = new DBUser(uid, fullName, rut, userTipeIdFk, fingerPrint);
                 return Optional.of(user);
             }
             pstmt.close();

@@ -10,27 +10,25 @@ package database.model;
  * @author Kenshi
  */
 public class DBUser {
-    
+
     private int id;
     private String fullname;
     private String rut;
-    private String temperature;
     private int userTypeIdFk;
     private byte[] fingerPrint;
 
-    public DBUser(int id, String fullname, String rut, String temperature, int userTypeIdFk, byte[] fingerPrint) {
+    public DBUser(int id, String fullname, String rut, int userTypeIdFk, byte[] fingerPrint) {
         this.id = id;
         this.fullname = fullname;
         this.rut = rut;
-        this.temperature = temperature;
+
         this.userTypeIdFk = userTypeIdFk;
         this.fingerPrint = fingerPrint;
     }
 
-    public DBUser(String fullname, String rut, String temperature, int userTypeIdFk, byte[] fingerPrint) {
+    public DBUser(String fullname, String rut, int userTypeIdFk, byte[] fingerPrint) {
         this.fullname = fullname;
         this.rut = rut;
-        this.temperature = temperature;
         this.userTypeIdFk = userTypeIdFk;
         this.fingerPrint = fingerPrint;
     }
@@ -62,14 +60,6 @@ public class DBUser {
         this.rut = rut;
     }
 
-    public String getTemperature() {
-        return temperature;
-    }
-
-    public void setTemperature(String temperature) {
-        this.temperature = temperature;
-    }
-
     public int getUserTypeIdFk() {
         return userTypeIdFk;
     }
@@ -88,12 +78,7 @@ public class DBUser {
 
     @Override
     public String toString() {
-        return "DBUser{" + "id=" + id + ", fullname=" + fullname + ", rut=" + rut + ", temperature=" + temperature + ", userTypeIdFk=" + userTypeIdFk + ", fingerPrint=" + fingerPrint + '}';
+        return "DBUser{" + "id=" + id + ", fullname=" + fullname + ", rut=" + rut + ", userTypeIdFk=" + userTypeIdFk + ", fingerPrint=" + fingerPrint + '}';
     }
-    
-    
-    
-    
-    
-   
+
 }
