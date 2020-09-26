@@ -18,7 +18,7 @@ public class FPSensorEnrollmentService extends FPSensor implements EnrollingList
 
     public FPSensorEnrollmentService(String serialId) {
         super(serialId);
-        
+
     }
 
     @Override
