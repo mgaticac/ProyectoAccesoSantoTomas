@@ -148,13 +148,14 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
                         case TEMPLATE_STATUS_READY:
                             txtAreaInfo.setText("");
                             btnCancelEnrollment.setText("Atras");
-                            JOptionPane.showMessageDialog(this, "Enrolamiento exitoso\nse limpiará la ventana de enrolamiento", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                            clearEnrollFrame();
                             DPFPTemplate template = dPFPEnrollment.getTemplate();
                             DBUser dbUser = new DBUser(txtName.getText(), txtRut.getText(), cbUserType.getSelectedIndex(), template.serialize());
+                            System.out.println(dbUser.toString());
                             userDao.add(dbUser);
                             dPFPEnrollment.clear();
                             capture.stopCapture();
+                            JOptionPane.showMessageDialog(this, "Enrolamiento exitoso\nse limpiará la ventana de enrolamiento", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                            clearEnrollFrame();
                             break;
 
                         case TEMPLATE_STATUS_FAILED:
@@ -235,6 +236,7 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
 
         jPanel2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
+        txtAreaInfo.setEditable(false);
         txtAreaInfo.setColumns(20);
         txtAreaInfo.setRows(5);
         jScrollPane2.setViewportView(txtAreaInfo);
@@ -742,6 +744,8 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         cbUserType.setSelectedIndex(0);
         txtAreaInfo.setText("");
         lblHuella.setIcon(new ImageIcon());
+        cbEnrollSensor.setEnabled(true);
+        cbEnrollSensor.setSelectedIndex(0);
     }
 
     private void userVerificated(DBUser user) {

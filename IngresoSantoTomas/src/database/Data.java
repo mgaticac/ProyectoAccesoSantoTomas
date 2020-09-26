@@ -1,6 +1,5 @@
 package database;
 
-import database.Conexion;
 import com.digitalpersona.onetouch.DPFPGlobal;
 import com.digitalpersona.onetouch.DPFPTemplate;
 import java.sql.ResultSet;
