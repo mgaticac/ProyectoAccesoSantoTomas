@@ -2,6 +2,7 @@ package database;
 
 import com.digitalpersona.onetouch.DPFPGlobal;
 import com.digitalpersona.onetouch.DPFPTemplate;
+import database.model.DBUser;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -52,7 +53,34 @@ public class Data {
             fpu.setUserId(rs.getInt("id"));
             userIdList.add(fpu);
         }
-        System.out.println("HOLA");
+        return userIdList;
+    }
+
+    public void exportDailyData() {
+       
+        //SELECT * INTO OUTFILE 'C:/your-directory/your-filename.csv'
+        //FIELDS TERMINATED BY ','
+        //ENCLOSED BY '"'
+        //ESCAPED BY '\\'
+        //LINES TERMINATED BY '\n'
+        //FROM tableName
+        
+        
+        
+    }
+    
+    public List<DBUser> getLatestEnrollments() throws SQLException{
+        List<DBUser> userIdList = new ArrayList<>();
+        ResultSet rs = c.ejecutar("SELECT * from user ORDER BY id DESC LIMIT 15;");
+        while (rs.next()) {
+            DBUser user = new DBUser();
+            user.setId(rs.getInt(1));
+            user.setFullname(rs.getString(2));
+            user.setRut(rs.getString(3));
+            userIdList.add(user);
+        }
+        
+        
         return userIdList;
     }
 

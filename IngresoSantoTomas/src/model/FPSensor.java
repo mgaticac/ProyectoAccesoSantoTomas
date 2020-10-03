@@ -109,4 +109,5 @@ public class FPSensor implements DPFPDataListener, Runnable {
     public void run() {
         capture.startCapture();
     }
+    
 }

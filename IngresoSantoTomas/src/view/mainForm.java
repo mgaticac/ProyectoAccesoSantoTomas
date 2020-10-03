@@ -26,8 +26,11 @@ import database.Data;
 import database.dao.UserDao;
 import database.dao.impl.UserDaoImpl;
 import database.model.DBUser;
+import java.util.Arrays;
 import java.util.List;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import model.EnrollingListener;
 import model.FPSensorBehivor;
 import model.FPUser;
@@ -64,9 +67,10 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
     private FPSensorVerificationService verificationService;
 
     public mainForm() throws ClassNotFoundException, SQLException {
-
         // GUI
+
         initComponents();
+
         setLocationRelativeTo(null);
 
         lblHuella.setPreferredSize(new Dimension(300, 250));
@@ -82,7 +86,7 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         }
 
         // DATA
-        connection = new Conexion("fpdatabase");
+        connection = new Conexion("fpdb");
         data = new Data(connection);
 
         //DAO
@@ -101,6 +105,7 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
 
         sensorAdministrator.addEnrollingListener(this::enrollingEvent);
         sensorAdministrator.addVerificationListener(this::verificationEvent);
+        listLastEnrollments();
     }
 
     @Override
@@ -114,8 +119,11 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
 
             } else {
                 log.severe("USER MISSMATCH:" + fpUser + " NOT FOUNDED IN DB!");
+
             }
         } else {
+            txtAreaState.setText("Usuario no identificado, \nintente nuevamente");
+
             log.info("user not found");
 
         }
@@ -147,7 +155,7 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
 
                         case TEMPLATE_STATUS_READY:
                             txtAreaInfo.setText("");
-                            btnCancelEnrollment.setText("Atras");
+
                             DPFPTemplate template = dPFPEnrollment.getTemplate();
                             DBUser dbUser = new DBUser(txtName.getText(), txtRut.getText(), cbUserType.getSelectedIndex(), template.serialize());
                             System.out.println(dbUser.toString());
@@ -156,6 +164,7 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
                             capture.stopCapture();
                             JOptionPane.showMessageDialog(this, "Enrolamiento exitoso\nse limpiará la ventana de enrolamiento", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                             clearEnrollFrame();
+                            listLastEnrollments();
                             break;
 
                         case TEMPLATE_STATUS_FAILED:
@@ -170,6 +179,8 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
 
             } catch (DPFPImageQualityException e) {
                 e.printStackTrace();
+            } catch (SQLException ex) {
+                Logger.getLogger(mainForm.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -178,12 +189,11 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        saveDailyInformationFrame = new javax.swing.JFrame();
+        jFileSave = new javax.swing.JFileChooser();
         jPanel1 = new javax.swing.JPanel();
         btnIdentify = new javax.swing.JButton();
-        btnExit = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        txtAreaInfo = new javax.swing.JTextArea();
         jPanel4 = new javax.swing.JPanel();
         lblHuella = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
@@ -198,6 +208,9 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         jLabel10 = new javax.swing.JLabel();
         btnEnroll = new javax.swing.JButton();
         btnCancelEnrollment = new javax.swing.JButton();
+        jPanel9 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtAreaInfo = new javax.swing.JTextArea();
         cbVerifySensor = new javax.swing.JComboBox<>();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -212,38 +225,52 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         lblNombreIdentificated = new javax.swing.JLabel();
         btnSaveIdentifiedUser = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
-        lblStateIcon = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtAreaState = new javax.swing.JTextArea();
         jPanel6 = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        listLatestInserts = new javax.swing.JList<>();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        dataTable = new javax.swing.JTable();
+        btnExit = new javax.swing.JButton();
+        jPanel10 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+
+        javax.swing.GroupLayout saveDailyInformationFrameLayout = new javax.swing.GroupLayout(saveDailyInformationFrame.getContentPane());
+        saveDailyInformationFrame.getContentPane().setLayout(saveDailyInformationFrameLayout);
+        saveDailyInformationFrameLayout.setHorizontalGroup(
+            saveDailyInformationFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 673, Short.MAX_VALUE)
+            .addGroup(saveDailyInformationFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, saveDailyInformationFrameLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jFileSave, javax.swing.GroupLayout.PREFERRED_SIZE, 673, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+        saveDailyInformationFrameLayout.setVerticalGroup(
+            saveDailyInformationFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 508, Short.MAX_VALUE)
+            .addGroup(saveDailyInformationFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, saveDailyInformationFrameLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jFileSave, javax.swing.GroupLayout.PREFERRED_SIZE, 508, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
         btnIdentify.setText("Identificar Persona con este sensor");
+        btnIdentify.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnIdentify.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIdentifyActionPerformed(evt);
             }
         });
 
-        btnExit.setText("Salir del programa");
-        btnExit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExitActionPerformed(evt);
-            }
-        });
-
         jPanel2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
-
-        txtAreaInfo.setEditable(false);
-        txtAreaInfo.setColumns(20);
-        txtAreaInfo.setRows(5);
-        jScrollPane2.setViewportView(txtAreaInfo);
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Huella Digital", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel4.add(lblHuella, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 16, 230, 200));
+
+        lblHuella.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        jPanel4.add(lblHuella, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 220, 200));
 
         jPanel5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -255,7 +282,8 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
 
         cbUserType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione un opción", "Estudiante", "Docente", "Personal", "Proveedor" }));
 
-        btnConfirmData.setText("Confirmar datos");
+        btnConfirmData.setText("Confirmar datos y \nreservar lector");
+        btnConfirmData.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnConfirmData.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConfirmDataActionPerformed(evt);
@@ -281,14 +309,13 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtRut)
                     .addComponent(txtName)
-                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(cbEnrollSensor, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cbUserType, javax.swing.GroupLayout.Alignment.LEADING, 0, 187, Short.MAX_VALUE)))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(cbEnrollSensor, javax.swing.GroupLayout.Alignment.LEADING, 0, 187, Short.MAX_VALUE)
+                            .addComponent(cbUserType, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnConfirmData, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnConfirmData, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(171, 171, 171))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -301,20 +328,22 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtRut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(cbUserType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbEnrollSensor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnConfirmData, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(32, 32, 32)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(cbUserType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cbEnrollSensor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10)))
+                    .addComponent(btnConfirmData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(55, 55, 55))
         );
 
         btnEnroll.setText("Confirme datos antes de enrolar");
+        btnEnroll.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnEnroll.setEnabled(false);
         btnEnroll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -323,6 +352,7 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         });
 
         btnCancelEnrollment.setText("Cancelar");
+        btnCancelEnrollment.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnCancelEnrollment.setEnabled(false);
         btnCancelEnrollment.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -330,47 +360,70 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
             }
         });
 
+        jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Información", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP));
+
+        txtAreaInfo.setEditable(false);
+        txtAreaInfo.setBackground(new java.awt.Color(231, 231, 231));
+        txtAreaInfo.setColumns(20);
+        txtAreaInfo.setRows(5);
+        jScrollPane2.setViewportView(txtAreaInfo);
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2)
+                .addContainerGap())
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(24, 24, 24)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(9, 9, 9)
-                                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 519, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(btnCancelEnrollment, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnEnroll, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE))
-                        .addGap(160, 160, 160))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(116, 116, 116)
+                        .addGap(0, 20, Short.MAX_VALUE)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(16, 16, 16)))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnCancelEnrollment, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnEnroll, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(171, 171, 171))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(158, 158, 158))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(6, 6, 6)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(22, 22, 22)
+                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(btnEnroll)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(btnCancelEnrollment)
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addGap(137, 137, 137))
         );
 
         cbVerifySensor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione una opción" }));
@@ -398,7 +451,7 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
 
         jLabel8.setText("Temperatura:");
 
-        spTemperature.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(30.0f), Float.valueOf(30.0f), Float.valueOf(42.0f), Float.valueOf(0.1f)));
+        spTemperature.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(33.0f), Float.valueOf(33.0f), Float.valueOf(40.0f), Float.valueOf(0.1f)));
 
         lblTypeIdentificated.setText("--------------");
 
@@ -407,6 +460,7 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         lblNombreIdentificated.setText("--------------");
 
         btnSaveIdentifiedUser.setText("Guardar");
+        btnSaveIdentifiedUser.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnSaveIdentifiedUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveIdentifiedUserActionPerformed(evt);
@@ -414,6 +468,12 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         });
 
         jLabel9.setText("Estado:");
+
+        txtAreaState.setEditable(false);
+        txtAreaState.setBackground(new java.awt.Color(231, 231, 231));
+        txtAreaState.setColumns(15);
+        txtAreaState.setRows(5);
+        jScrollPane1.setViewportView(txtAreaState);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -428,26 +488,25 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
                     .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(lblTypeIdentificated, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(spTemperature, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblTypeIdentificated, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(lblNombreIdentificated, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jLabel9))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(lblRutIdentificated, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblStateIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(25, 25, 25))))
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(lblRutIdentificated, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(lblNombreIdentificated, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(48, 48, 48))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                        .addComponent(jLabel9)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                                .addComponent(jScrollPane1)))
+                        .addContainerGap())))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnSaveIdentifiedUser, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -462,49 +521,100 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblNombreIdentificated)
                             .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(lblRutIdentificated))
-                        .addGap(33, 33, 33)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel7)
-                            .addComponent(lblTypeIdentificated))
-                        .addGap(32, 32, 32)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
-                            .addComponent(spTemperature, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(33, 33, 33))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblStateIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(lblTypeIdentificated))
+                .addGap(32, 32, 32)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(spTemperature, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(15, 15, 15)
-                .addComponent(btnSaveIdentifiedUser, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(btnSaveIdentifiedUser, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Ultimos Registros"));
 
-        listLatestInserts.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        jScrollPane4.setViewportView(listLatestInserts);
+        dataTable.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        dataTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "ID Registro", "RUT", "Nombre"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        dataTable.setRowHeight(20);
+        jScrollPane5.setViewportView(dataTable);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane4)
-                .addContainerGap())
+            .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 579, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
+            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+        );
+
+        btnExit.setText("Salir del programa");
+        btnExit.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExitActionPerformed(evt);
+            }
+        });
+
+        jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Informe", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP));
+
+        jButton1.setText("Exportar informe del día");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel10Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE))
+        );
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addContainerGap(28, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -515,24 +625,26 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(cbVerifySensor, 0, 281, Short.MAX_VALUE)
+                                    .addComponent(btnIdentify, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addGap(18, 18, 18))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(cbVerifySensor, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnIdentify)
-                                .addGap(40, 40, 40)))
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(169, 169, 169)
-                        .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(28, 28, 28)
+                                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(24, 24, 24))
+                .addGap(13, 13, 13))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -540,83 +652,72 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 717, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(34, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(cbVerifySensor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
                                 .addComponent(btnIdentify, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(41, 41, 41)
-                        .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(35, 35, 35))))
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnExit, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(20, 20, 20))))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnIdentifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIdentifyActionPerformed
+    private void btnSaveIdentifiedUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveIdentifiedUserActionPerformed
 
-        if ((cbEnrollSensor.getSelectedItem().equals(cbVerifySensor.getSelectedItem().toString())) && !(cbEnrollSensor.isEnabled())) {
-            JOptionPane.showMessageDialog(this, "El sensor seleccionado está siendo usado para enrolar,\nporfavor elija otro de la lista o termine de ocuparlo");
-        } else {
-            userService.retriveUserListFromDatabase(); // hace el select y obtiene todos los usuarios internamente
-            String sensorId = cbVerifySensor.getSelectedItem().toString();
-            sensorAdministrator.changeSensorBehivor("{" + sensorId + "}", FPSensorBehivor.VALIDATING);
+        if (JOptionPane.showConfirmDialog(null, "¿Los datos rescatados son los correctos?", "Confirmación", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 
-            JOptionPane.showMessageDialog(this, "Sensor " + cbVerifySensor.getSelectedItem().toString() + " está Identificando.\nLos Datos se mostrarán en el apartado de 'identificación'\ncuando el sensor detecte información");
+            try {
+                List<FPUser> usersList = data.getUserIdByRut(lblRutIdentificated.getText());
+                FPUser fPUser = new FPUser();
+                for (int i = 0; i < usersList.size(); i++) {
+                    fPUser.setUserId((int) usersList.get(i).getUserId());
+                }
 
-        }
+                System.out.println("USER ID:" + fPUser.getUserId());
+                connection.ejecutar("INSERT INTO history VALUES(NULL, " + fPUser.getUserId() + ", NOW(),'" + spTemperature.getValue() + "');");
 
-    }//GEN-LAST:event_btnIdentifyActionPerformed
-
-    private void btnEnrollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnrollActionPerformed
-
-        sensorAdministrator.changeSensorBehivor("{" + cbEnrollSensor.getSelectedItem().toString() + "}", FPSensorBehivor.ENROLLING);
-        dPFPEnrollment = DPFPGlobal.getEnrollmentFactory().createEnrollment();
-        System.out.println("ENROLANDO");
-
-
-    }//GEN-LAST:event_btnEnrollActionPerformed
-
-    private void btnConfirmDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmDataActionPerformed
-
-        if ((txtName.getText().equals("")) || (txtRut.getText().equals("")) || (cbEnrollSensor.getSelectedIndex() == 0) || (cbUserType.getSelectedIndex() == 0)) {
-
-            JOptionPane.showMessageDialog(null, "No ha completado todos los campos, porfavor verifique");
-        } else {
-
-            btnCancelEnrollment.setText("Cancelar enrolamiento");
-
-            // Orden comboBox Estudiante - Docente - Personal - Proveedor
-            //Confirmacion Datos Enrolamiento
-            confirmEnrollmentData();
+                JOptionPane.showMessageDialog(null, "Datos ingresados correctamente, persona registrada en la base de datos.");
+                spTemperature.setValue(33);
+                lblNombreIdentificated.setText("--------------");
+                lblRutIdentificated.setText("--------------");
+                lblTypeIdentificated.setText("--------------");
+            } catch (SQLException ex) {
+                Logger.getLogger(mainForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
         }
-
-
-    }//GEN-LAST:event_btnConfirmDataActionPerformed
-
-    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_btnExitActionPerformed
+    }//GEN-LAST:event_btnSaveIdentifiedUserActionPerformed
 
     private void cbVerifySensorItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbVerifySensorItemStateChanged
         if (cbVerifySensor.getSelectedIndex() > 0) {
@@ -630,32 +731,59 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         clearEnrollFrame();
     }//GEN-LAST:event_btnCancelEnrollmentActionPerformed
 
-    private void btnSaveIdentifiedUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveIdentifiedUserActionPerformed
+    private void btnEnrollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnrollActionPerformed
+        JOptionPane.showMessageDialog(this, "Se ha iniciado el proceso de enrolado, siga las instrucciones mostradas más arriba");
+        txtAreaInfo.setText("Enrolado iniciado, porfavor ponga su dedo 4 veces en el lector, \npresionando de forma considerada y levantando cuando se capture la imagen");
+        sensorAdministrator.changeSensorBehivor("{" + cbEnrollSensor.getSelectedItem().toString() + "}", FPSensorBehivor.ENROLLING);
+        dPFPEnrollment = DPFPGlobal.getEnrollmentFactory().createEnrollment();
+        System.out.println("ENROLANDO");
+    }//GEN-LAST:event_btnEnrollActionPerformed
 
-        if (JOptionPane.showConfirmDialog(null, "¿Los datos rescatados son los correctos?", "Confirmación", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-            JOptionPane.showMessageDialog(null, "Datos ingresados correctamente, persona registrada en la base de datos.");
-            try {
-                List<FPUser> usersList = data.getUserIdByRut(lblRutIdentificated.getText());
-                FPUser fPUser = new FPUser();
-                for (int i = 0; i < usersList.size(); i++) {
-                    fPUser.setUserId((int) usersList.get(i).getUserId());
-                }
+    private void btnConfirmDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmDataActionPerformed
 
-                System.out.println("USER ID:" + fPUser.getUserId());
-                connection.ejecutar("INSERT INTO history VALUES(NULL, " + fPUser.getUserId() + ", NOW(),'" + spTemperature.getValue() + "');");
+        if ((txtName.getText().equals("")) || (txtRut.getText().equals("")) || (cbEnrollSensor.getSelectedIndex() == 0) || (cbUserType.getSelectedIndex() == 0)) {
 
-            } catch (SQLException ex) {
-                Logger.getLogger(mainForm.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            JOptionPane.showMessageDialog(null, "No ha completado todos los campos, porfavor verifique");
+        } else {
+
+            btnCancelEnrollment.setText("Cancelar enrolamiento");
+            btnCancelEnrollment.setEnabled(true);
+            // Orden comboBox Estudiante - Docente - Personal - Proveedor
+            //Confirmacion Datos Enrolamiento
+            confirmEnrollmentData();
 
         }
+    }//GEN-LAST:event_btnConfirmDataActionPerformed
 
-    }//GEN-LAST:event_btnSaveIdentifiedUserActionPerformed
+    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_btnExitActionPerformed
 
-    /*
-    
-    
-     */
+    private void btnIdentifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIdentifyActionPerformed
+
+        if ((cbEnrollSensor.getSelectedItem().equals(cbVerifySensor.getSelectedItem().toString())) && !(cbEnrollSensor.isEnabled())) {
+            JOptionPane.showMessageDialog(this, "El sensor seleccionado está siendo usado para enrolar,\nporfavor elija otro de la lista o termine de ocuparlo");
+        } else {
+            userService.retriveUserListFromDatabase(); // hace el select y obtiene todos los usuarios internamente
+            String sensorId = cbVerifySensor.getSelectedItem().toString();
+            sensorAdministrator.changeSensorBehivor("{" + sensorId + "}", FPSensorBehivor.VALIDATING);
+
+            JOptionPane.showMessageDialog(this, "Sensor " + cbVerifySensor.getSelectedItem().toString() + " está Identificando.\nLos Datos se mostrarán en el apartado de 'identificación'\ncuando el sensor detecte información");
+            cbVerifySensor.setSelectedIndex(0);
+        }
+    }//GEN-LAST:event_btnIdentifyActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        //Exportar informe del día en formato CSV y ordenarlo en un archivo excel o pdf
+        saveDailyInformationFrame.setVisible(true);
+        saveDailyInformationFrame.setAutoRequestFocus(true);
+        saveDailyInformationFrame.setLocationRelativeTo(null);
+        saveDailyInformationFrame.setSize(new Dimension(680, 550));
+        jFileSave.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+        data.exportDailyData();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(() -> {
@@ -681,6 +809,9 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
     private javax.swing.JComboBox<String> cbEnrollSensor;
     private javax.swing.JComboBox<String> cbUserType;
     private javax.swing.JComboBox<String> cbVerifySensor;
+    private javax.swing.JTable dataTable;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JFileChooser jFileSave;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -691,23 +822,26 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel9;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel lblHuella;
     private javax.swing.JLabel lblNombreIdentificated;
     private javax.swing.JLabel lblRutIdentificated;
-    private javax.swing.JLabel lblStateIcon;
     private javax.swing.JLabel lblTypeIdentificated;
-    private javax.swing.JList<String> listLatestInserts;
+    private javax.swing.JFrame saveDailyInformationFrame;
     private javax.swing.JSpinner spTemperature;
     private javax.swing.JTextArea txtAreaInfo;
+    private javax.swing.JTextArea txtAreaState;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtRut;
     // End of variables declaration//GEN-END:variables
@@ -723,6 +857,8 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
     }
 
     private void confirmEnrollmentData() {
+
+        txtAreaInfo.setText("Datos confirmados, haga click en 'enrolar' para iniciar el proceso de registro");
 
         btnEnroll.setEnabled(true);
         btnEnroll.setText("Enrolar");
@@ -746,11 +882,13 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         lblHuella.setIcon(new ImageIcon());
         cbEnrollSensor.setEnabled(true);
         cbEnrollSensor.setSelectedIndex(0);
+        btnCancelEnrollment.setEnabled(false);
     }
 
     private void userVerificated(DBUser user) {
 
         log.log(Level.INFO, "USER DETECTED!:{0}", user);
+        txtAreaState.setText("Usuario identificado correctamente!");
         String tipoPersona = "";
 
         //CONSULTA INNERJOIN PARA LOS DATOS COMPLETOS DEL USUARIO (NOMBRE, RUT, TIPO['String'])
@@ -774,6 +912,25 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         lblNombreIdentificated.setText(user.getFullname());
         lblRutIdentificated.setText(user.getRut());
         lblTypeIdentificated.setText(tipoPersona);
+
+    }
+
+    private void listLastEnrollments() throws SQLException {
+        List<DBUser> latestEnrolledUsers = data.getLatestEnrollments();
+        DefaultTableModel dtm = new DefaultTableModel();
+
+        dtm.addColumn("ID Usuario");
+        dtm.addColumn("Rut");
+        dtm.addColumn("Nombre");
+        for (DBUser userinfo : latestEnrolledUsers) {
+            String[] userData = new String[]{
+                String.valueOf(userinfo.getId()), userinfo.getRut(), userinfo.getFullname()
+            };
+            dtm.addRow(userData);
+        }
+        dataTable.setModel(dtm);
+        dataTable.sizeColumnsToFit(WIDTH);
+        dataTable.sizeColumnsToFit(HEIGHT);
 
     }
 

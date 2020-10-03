@@ -55,7 +55,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void add(DBUser t) {
-        String query = "INSERT INTO user (id, fullname, rut, user_type_id_fk, finger_print) VALUES (?,?,?,?,?);";
+        String query = "INSERT INTO user (id, fullname, rut, user_type_id_fk, finger_print, institute_fk) VALUES (?,?,?,?,?,?);";
         try {
             PreparedStatement pstmt = (PreparedStatement) con.getCon().prepareStatement(query);
             pstmt.setObject(1, null);
@@ -63,6 +63,9 @@ public class UserDaoImpl implements UserDao {
             pstmt.setString(3, t.getRut());
             pstmt.setInt(4, t.getUserTypeIdFk());
             pstmt.setBytes(5, t.getFingerPrint());
+            pstmt.setInt(6, 1);
+            
+
             if (query.toLowerCase().startsWith("insert")
                     || query.toLowerCase().startsWith("update")
                     || query.toLowerCase().startsWith("delete")) {

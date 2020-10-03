@@ -17,7 +17,9 @@ public class Conexion {
     private Connection con;
 
     public Conexion(String bd) throws ClassNotFoundException, SQLException {
-        String url = "jdbc:mysql://localhost/" + bd + "?user=root&password=Olakease123";
+        String url = "jdbc:mysql://fp-db-endpoint.cqslapnsdzfa.us-east-2.rds.amazonaws.com/" + bd + "?user=xzero&password=asdqwe123";
+
+        //
         log.info("Conecction url string:" + url);
         Class.forName("com.mysql.jdbc.Driver");
         con = DriverManager.getConnection(url);
@@ -39,29 +41,7 @@ public class Conexion {
 
     }
 
-    public ResultSet insertHuella(String nombre, String rut, String temperatura, int userTypeId, byte[] fingerPrintArray) throws SQLException, FileNotFoundException, IOException {
-        String query = "INSERT INTO user (id, fullname, rut, temperature, user_type_id_fk, finger_print) VALUES (?,?,?,?,?,?);";
-        PreparedStatement pstmt = (PreparedStatement) con.prepareStatement(query);
-
-        pstmt.setObject(1, null);
-        pstmt.setString(2, nombre);
-        pstmt.setString(3, rut);
-        pstmt.setString(4, temperatura);
-        pstmt.setInt(5, userTypeId);
-        pstmt.setBytes(6, fingerPrintArray);
-
-        if (query.toLowerCase().startsWith("insert")
-                || query.toLowerCase().startsWith("update")
-                || query.toLowerCase().startsWith("delete")) {
-            pstmt.execute();
-            close();
-            return null;
-        }
-
-        log.info("Executing Query (insertHuella):" + pstmt.toString());
-
-        return null;
-    }
+    
 
     public void close() throws SQLException {
         sen.close();
@@ -70,5 +50,7 @@ public class Conexion {
     public Connection getCon() {
         return con;
     }
+
+    
 
 }

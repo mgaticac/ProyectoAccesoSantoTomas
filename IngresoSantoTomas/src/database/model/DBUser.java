@@ -24,6 +24,7 @@ public class DBUser {
 
         this.userTypeIdFk = userTypeIdFk;
         this.fingerPrint = fingerPrint;
+
     }
 
     public DBUser(String fullname, String rut, int userTypeIdFk, byte[] fingerPrint) {
@@ -31,6 +32,7 @@ public class DBUser {
         this.rut = rut;
         this.userTypeIdFk = userTypeIdFk;
         this.fingerPrint = fingerPrint;
+
     }
 
     public DBUser() {
@@ -79,6 +81,10 @@ public class DBUser {
     @Override
     public String toString() {
         return "DBUser{" + "id=" + id + ", fullname=" + fullname + ", rut=" + rut + ", userTypeIdFk=" + userTypeIdFk + ", fingerPrint=" + fingerPrint + '}';
+    }
+    
+    public String listLastUsersInfo(){
+        return " "+id+" "+fullname+" "+rut;
     }
 
 }
