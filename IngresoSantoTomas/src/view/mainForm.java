@@ -26,7 +26,8 @@ import database.Data;
 import database.dao.UserDao;
 import database.dao.impl.UserDaoImpl;
 import database.model.DBUser;
-import java.util.Arrays;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -189,8 +190,6 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        saveDailyInformationFrame = new javax.swing.JFrame();
-        jFileSave = new javax.swing.JFileChooser();
         jPanel1 = new javax.swing.JPanel();
         btnIdentify = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
@@ -232,26 +231,7 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         dataTable = new javax.swing.JTable();
         btnExit = new javax.swing.JButton();
         jPanel10 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-
-        javax.swing.GroupLayout saveDailyInformationFrameLayout = new javax.swing.GroupLayout(saveDailyInformationFrame.getContentPane());
-        saveDailyInformationFrame.getContentPane().setLayout(saveDailyInformationFrameLayout);
-        saveDailyInformationFrameLayout.setHorizontalGroup(
-            saveDailyInformationFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 673, Short.MAX_VALUE)
-            .addGroup(saveDailyInformationFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, saveDailyInformationFrameLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jFileSave, javax.swing.GroupLayout.PREFERRED_SIZE, 673, javax.swing.GroupLayout.PREFERRED_SIZE)))
-        );
-        saveDailyInformationFrameLayout.setVerticalGroup(
-            saveDailyInformationFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 508, Short.MAX_VALUE)
-            .addGroup(saveDailyInformationFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, saveDailyInformationFrameLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jFileSave, javax.swing.GroupLayout.PREFERRED_SIZE, 508, javax.swing.GroupLayout.PREFERRED_SIZE)))
-        );
+        btnExportDailyData = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -595,10 +575,10 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
 
         jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Informe", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP));
 
-        jButton1.setText("Exportar informe del día");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnExportDailyData.setText("Exportar informe del día");
+        btnExportDailyData.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnExportDailyDataActionPerformed(evt);
             }
         });
 
@@ -608,13 +588,14 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE))
+                .addComponent(btnExportDailyData, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE))
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
-                .addContainerGap(28, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap()
+                .addComponent(btnExportDailyData, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -736,7 +717,6 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         txtAreaInfo.setText("Enrolado iniciado, porfavor ponga su dedo 4 veces en el lector, \npresionando de forma considerada y levantando cuando se capture la imagen");
         sensorAdministrator.changeSensorBehivor("{" + cbEnrollSensor.getSelectedItem().toString() + "}", FPSensorBehivor.ENROLLING);
         dPFPEnrollment = DPFPGlobal.getEnrollmentFactory().createEnrollment();
-        System.out.println("ENROLANDO");
     }//GEN-LAST:event_btnEnrollActionPerformed
 
     private void btnConfirmDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmDataActionPerformed
@@ -773,26 +753,57 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         }
     }//GEN-LAST:event_btnIdentifyActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnExportDailyDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportDailyDataActionPerformed
         //Exportar informe del día en formato CSV y ordenarlo en un archivo excel o pdf
-        saveDailyInformationFrame.setVisible(true);
-        saveDailyInformationFrame.setAutoRequestFocus(true);
-        saveDailyInformationFrame.setLocationRelativeTo(null);
-        saveDailyInformationFrame.setSize(new Dimension(680, 550));
-        jFileSave.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
-        data.exportDailyData();
-    }//GEN-LAST:event_jButton1ActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        while (true) {
+            if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                try {
+                    File file = chooser.getSelectedFile();
+                    if (!file.toString().toLowerCase().endsWith(".csv")) {
+                        file = new File(file.toString() + ".csv");
+                    }
+                    if (file.exists()) {
+                        int choice = JOptionPane.showConfirmDialog(this,
+                                String.format("El Archivo \"%1$s\" ya existe.\n¿Quiere reemplazarlo?", file.toString()),
+                                "Guardar Informe",
+                                JOptionPane.YES_NO_CANCEL_OPTION);
+                        if (choice == JOptionPane.NO_OPTION) {
+                            continue;
+                        } else if (choice == JOptionPane.CANCEL_OPTION) {
+                            break;
+                        }
+                    }
+                    FileWriter stream = new FileWriter(file);
+                    String[] a = {"a","b","c"};
+                    System.out.println(String.valueOf(a));
+                    stream.write(String.valueOf(a));
+                    stream.close();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, ex.getLocalizedMessage(), "Guardar Informe", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            break;
+
+        }
+
+
+    }//GEN-LAST:event_btnExportDailyDataActionPerformed
 
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(() -> {
             try {
                 new mainForm().setVisible(true);
+
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger(mainForm.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(mainForm.class
+                        .getName()).log(Level.SEVERE, null, ex);
+
             } catch (SQLException ex) {
-                Logger.getLogger(mainForm.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(mainForm.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
         });
 
@@ -804,14 +815,13 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
     private javax.swing.JButton btnConfirmData;
     private javax.swing.JButton btnEnroll;
     private javax.swing.JButton btnExit;
+    private javax.swing.JButton btnExportDailyData;
     private javax.swing.JButton btnIdentify;
     private javax.swing.JButton btnSaveIdentifiedUser;
     private javax.swing.JComboBox<String> cbEnrollSensor;
     private javax.swing.JComboBox<String> cbUserType;
     private javax.swing.JComboBox<String> cbVerifySensor;
     private javax.swing.JTable dataTable;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JFileChooser jFileSave;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -838,7 +848,6 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
     private javax.swing.JLabel lblNombreIdentificated;
     private javax.swing.JLabel lblRutIdentificated;
     private javax.swing.JLabel lblTypeIdentificated;
-    private javax.swing.JFrame saveDailyInformationFrame;
     private javax.swing.JSpinner spTemperature;
     private javax.swing.JTextArea txtAreaInfo;
     private javax.swing.JTextArea txtAreaState;

@@ -58,12 +58,12 @@ public class Data {
 
     public void exportDailyData() {
        
-        //SELECT * INTO OUTFILE 'C:/your-directory/your-filename.csv'
-        //FIELDS TERMINATED BY ','
-        //ENCLOSED BY '"'
-        //ESCAPED BY '\\'
-        //LINES TERMINATED BY '\n'
-        //FROM tableName
+//        SELECT * INTO OUTFILE 'C:/your-directory/your-filename.csv'
+//        FIELDS TERMINATED BY ','
+//        ENCLOSED BY '"'
+//        ESCAPED BY '\\'
+//        LINES TERMINATED BY '\n'
+//        FROM tableName
         
         
         
