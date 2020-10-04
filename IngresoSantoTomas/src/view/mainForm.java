@@ -776,9 +776,21 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
                         }
                     }
                     FileWriter stream = new FileWriter(file);
-                    String[] a = {"a","b","c"};
-                    System.out.println(String.valueOf(a));
-                    stream.write(String.valueOf(a));
+                    String[] columnTitle = {"ID Usuario;","Nombre;","Rut;"};
+                    for (int i = 0; i < columnTitle.length; i++) {
+                        stream.write(columnTitle[i]);
+                        if((i+1)==columnTitle.length){
+                            stream.write("\n");
+                        }
+                    }
+                    List<DBUser> listDailyUsers = data.exportDailyData();
+                    for (DBUser user : listDailyUsers) {
+                        stream.write(user.getId()+";");
+                        stream.write(user.getFullname()+";");
+                        stream.write(user.getRut()+"\n");
+                    }
+                    
+                    
                     stream.close();
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, ex.getLocalizedMessage(), "Guardar Informe", JOptionPane.ERROR_MESSAGE);

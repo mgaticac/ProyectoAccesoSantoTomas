@@ -106,7 +106,7 @@ SELECT *
 FROM history
 INNER JOIN user
 ON history.user_id_fk = user.id
-WHERE history.register_date > DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+WHERE history.register_date > DATE_SUB(CURDATE(), INTERVAL 1 DAY);
 
 
 

@@ -56,20 +56,25 @@ public class Data {
         return userIdList;
     }
 
-    public void exportDailyData() {
-       
-//        SELECT * INTO OUTFILE 'C:/your-directory/your-filename.csv'
-//        FIELDS TERMINATED BY ','
-//        ENCLOSED BY '"'
-//        ESCAPED BY '\\'
-//        LINES TERMINATED BY '\n'
-//        FROM tableName
+    public List<DBUser> exportDailyData() throws SQLException {
+        List<DBUser> userList = new ArrayList<>();
+        ResultSet rs = c.ejecutar("SELECT user.id, user.fullname, user.rut FROM history "
+                + "INNER JOIN user "
+                + "ON history.user_id_fk = user.id "
+                + "WHERE history.register_date > DATE_SUB(CURDATE(), INTERVAL 1 DAY);");
         
-        
-        
+        while(rs.next()){
+            DBUser user = new DBUser();
+            user.setId(rs.getInt(1));
+            user.setFullname(rs.getString(2));
+            user.setRut(rs.getString(3));
+            userList.add(user);
+            
+        }
+        return userList;
     }
-    
-    public List<DBUser> getLatestEnrollments() throws SQLException{
+
+    public List<DBUser> getLatestEnrollments() throws SQLException {
         List<DBUser> userIdList = new ArrayList<>();
         ResultSet rs = c.ejecutar("SELECT * from user ORDER BY id DESC LIMIT 15;");
         while (rs.next()) {
@@ -79,8 +84,7 @@ public class Data {
             user.setRut(rs.getString(3));
             userIdList.add(user);
         }
-        
-        
+
         return userIdList;
     }
 
