@@ -1,14 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package database.model;
 
-/**
- *
- * @author Kenshi
- */
 public class DBUser {
 
     private int id;
@@ -16,6 +7,7 @@ public class DBUser {
     private String rut;
     private int userTypeIdFk;
     private byte[] fingerPrint;
+    private String verifyDate;
 
     public DBUser(int id, String fullname, String rut, int userTypeIdFk, byte[] fingerPrint) {
         this.id = id;
@@ -33,6 +25,13 @@ public class DBUser {
         this.userTypeIdFk = userTypeIdFk;
         this.fingerPrint = fingerPrint;
 
+    }
+
+    public DBUser(int id, String fullname, String rut, String verifyDate) {
+        this.id = id;
+        this.fullname = fullname;
+        this.rut = rut;
+        this.verifyDate = verifyDate;
     }
 
     public DBUser() {
@@ -78,13 +77,21 @@ public class DBUser {
         this.fingerPrint = fingerPrint;
     }
 
+    public String getVerifyDate() {
+        return verifyDate;
+    }
+
+    public void setVerifyDate(String verifyDate) {
+        this.verifyDate = verifyDate;
+    }
+
     @Override
     public String toString() {
         return "DBUser{" + "id=" + id + ", fullname=" + fullname + ", rut=" + rut + ", userTypeIdFk=" + userTypeIdFk + ", fingerPrint=" + fingerPrint + '}';
     }
-    
-    public String listLastUsersInfo(){
-        return " "+id+" "+fullname+" "+rut;
+
+    public String listLastUsersInfo() {
+        return " " + id + " " + fullname + " " + rut;
     }
 
 }

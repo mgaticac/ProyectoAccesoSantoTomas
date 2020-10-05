@@ -58,18 +58,23 @@ public class Data {
 
     public List<DBUser> exportDailyData() throws SQLException {
         List<DBUser> userList = new ArrayList<>();
-        ResultSet rs = c.ejecutar("SELECT user.id, user.fullname, user.rut FROM history "
+        ResultSet rs = c.ejecutar("SELECT user.id, user.fullname, user.rut, history.register_date FROM history "
                 + "INNER JOIN user "
                 + "ON history.user_id_fk = user.id "
-                + "WHERE history.register_date > DATE_SUB(CURDATE(), INTERVAL 1 DAY);");
-        
-        while(rs.next()){
+                + "WHERE history.register_date > DATE_SUB(CURDATE(), INTERVAL 1 DAY)"
+                + "ORDER BY history.register_date ASC;");
+
+        while (rs.next()) {
             DBUser user = new DBUser();
             user.setId(rs.getInt(1));
+            System.out.println(rs.getInt(1));
             user.setFullname(rs.getString(2));
+            System.out.println(rs.getString(2));
             user.setRut(rs.getString(3));
+            System.out.println(rs.getString(3));
+            user.setVerifyDate(rs.getString(4));
+            System.out.println(rs.getString(4));
             userList.add(user);
-            
         }
         return userList;
     }
@@ -86,6 +91,16 @@ public class Data {
         }
 
         return userIdList;
+    }
+
+    public int getInstituteId(String instituteName) throws SQLException {
+        int instituteId = 0;
+        ResultSet rs = c.ejecutar("SELECT id FROM institute WHERE name LIKE '" + instituteName + "';");
+        while (rs.next()) {
+            instituteId = rs.getInt(1);
+            System.out.println("ID RESCATADO: " + instituteId);
+        }
+        return instituteId;
     }
 
 }

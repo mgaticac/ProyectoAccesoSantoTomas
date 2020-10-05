@@ -50,7 +50,29 @@ INSERT INTO user_type VALUES(NULL,'technician',25);
 
 
 INSERT INTO institute VALUES(NULL,'Santo Tomas Rancagua');
-INSERT INTO institute VALUES(NULL,'Santo Tomas Santiago');
+INSERT INTO institute VALUES(NULL,'Antofagasta');
+INSERT INTO institute VALUES(NULL,'Arica');
+INSERT INTO institute VALUES(NULL,'Chillán');
+INSERT INTO institute VALUES(NULL,'Concepción');
+INSERT INTO institute VALUES(NULL,'Copiapó');
+INSERT INTO institute VALUES(NULL,'Curicó');
+INSERT INTO institute VALUES(NULL,'Iquique');
+INSERT INTO institute VALUES(NULL,'La Serena');
+INSERT INTO institute VALUES(NULL,'Los Ángeles');
+INSERT INTO institute VALUES(NULL,'Osorno');
+INSERT INTO institute VALUES(NULL,'Ovalle');
+INSERT INTO institute VALUES(NULL,'Puente Alto');
+INSERT INTO institute VALUES(NULL,'Puerto Montt');
+INSERT INTO institute VALUES(NULL,'Punta Arenas');
+INSERT INTO institute VALUES(NULL,'Rancagua');
+INSERT INTO institute VALUES(NULL,'San Joaquín');
+INSERT INTO institute VALUES(NULL,'Santiago Centro y Estación Central');
+INSERT INTO institute VALUES(NULL,'Santiago UST');
+INSERT INTO institute VALUES(NULL,'Talca');
+INSERT INTO institute VALUES(NULL,'Temuco');
+INSERT INTO institute VALUES(NULL,'Valdivia');
+INSERT INTO institute VALUES(NULL,'Viña del Mar');
+
 
 
 /*
@@ -102,11 +124,13 @@ CALL clone_user(20,1);
 --         FROM tableName
 -- 
 
-SELECT *
-FROM history
-INNER JOIN user
-ON history.user_id_fk = user.id
-WHERE history.register_date > DATE_SUB(CURDATE(), INTERVAL 1 DAY);
+-- SELECT *
+-- FROM history
+-- INNER JOIN user
+-- ON history.user_id_fk = user.id
+-- WHERE history.register_date > DATE_SUB(CURDATE(), INTERVAL 1 DAY);
+
+
 
 
 

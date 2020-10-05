@@ -6,9 +6,13 @@
 package database.dao.impl;
 
 import database.Conexion;
+import database.Data;
 import database.dao.UserDao;
 import database.model.DBSede;
 import database.model.DBUser;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -55,6 +60,24 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void add(DBUser t) {
+        int instituteId = 0;
+        try (InputStream input = new FileInputStream("src/resources/config.properties")) {
+
+            Properties prop = new Properties();
+
+            // load a properties file
+            prop.load(input);
+
+            // get the property value
+            String actualInstitute = prop.getProperty("institute");
+            Data d = new Data(con);
+            instituteId = d.getInstituteId(actualInstitute);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         String query = "INSERT INTO user (id, fullname, rut, user_type_id_fk, finger_print, institute_fk) VALUES (?,?,?,?,?,?);";
         try {
             PreparedStatement pstmt = (PreparedStatement) con.getCon().prepareStatement(query);
@@ -63,8 +86,7 @@ public class UserDaoImpl implements UserDao {
             pstmt.setString(3, t.getRut());
             pstmt.setInt(4, t.getUserTypeIdFk());
             pstmt.setBytes(5, t.getFingerPrint());
-            pstmt.setInt(6, 1);
-            
+            pstmt.setInt(6, instituteId);
 
             if (query.toLowerCase().startsWith("insert")
                     || query.toLowerCase().startsWith("update")
