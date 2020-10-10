@@ -48,9 +48,17 @@ db.passwd = contraseña_base_de_datos
 #Id institulo
 location.institute = id_ubicacion_instituto
 ```
+
+el Atributo **location.institute** del archivo de configuración es un id numerico que por ahora depende directamente del ID la base de datos, para obtener la información de consultar directamente a esta
+
+```sql
+USE fpdb;
+SELECT id,name FROM institute;
+```
 *nota: por razones de seguridad este archivo debe ser creado manualmente*
 
-### Poblando/Configurando la Base de datos
+
+### 🧢 Poblando/Configurando la Base de datos 
 La aplicación accede a una base de datos **MySQL/MariaDB** por lo cual se debe tener los datos de conexión de esta para luego poblarla.
 
 El script para poblar la BD se encuentra en :  [Link SQL Script](https://github.com/XZeromarx/ProyectoAccesoSantoTomas/blob/master/src/model/database.sql) 📃
