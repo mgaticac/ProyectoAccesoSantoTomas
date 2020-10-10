@@ -52,7 +52,6 @@ location.institute = id_ubicacion_instituto
 el Atributo **location.institute** del archivo de configuración es un id numerico que por ahora depende directamente del ID la base de datos, para obtener la información de consultar directamente a esta
 
 ```sql
-USE fpdb;
 SELECT id,name FROM institute;
 ```
 *nota: por razones de seguridad este archivo debe ser creado manualmente*
