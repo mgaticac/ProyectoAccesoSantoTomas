@@ -70,7 +70,7 @@ java -jar "IngresoSantoTomas.jar"
 ```
 Ejecución sin CLI
 ```sh
-javaw -jar .\IngresoSantoTomas.jar
+javaw -jar IngresoSantoTomas.jar
 ```
 
 # 📕 Licencia 
