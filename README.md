@@ -64,11 +64,14 @@ La aplicación accede a una base de datos **MySQL/MariaDB** por lo cual se debe 
 El script para poblar la BD se encuentra en :  [Link SQL Script](https://github.com/XZeromarx/ProyectoAccesoSantoTomas/blob/master/src/model/database.sql) 📃
 
 ## 🚀 Ejecutando la aplicación
-para ejecutar la aplicación:
+Para ejecutar la aplicación mostrando CLI:
 ```sh
 java -jar "IngresoSantoTomas.jar"
 ```
-
+Ejecución sin CLI
+```sh
+javaw -jar IngresoSantoTomas.jar
+```
 
 # 📕 Licencia 
 Este proyecto creado por [klawx3](https://github.com/klawx3) y [xzeromarkx](https://github.com/XZeromarx) esta bajo la licencia:
