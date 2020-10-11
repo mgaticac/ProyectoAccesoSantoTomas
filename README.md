@@ -52,6 +52,7 @@ location.institute = id_ubicacion_instituto
 el Atributo **location.institute** del archivo de configuración es un id numerico que por ahora depende directamente del ID la base de datos, para obtener la información de consultar directamente a esta
 
 ```sql
+USE fpdb;
 SELECT id,name FROM institute;
 ```
 *nota: por razones de seguridad este archivo debe ser creado manualmente*
@@ -62,9 +63,14 @@ La aplicación accede a una base de datos **MySQL/MariaDB** por lo cual se debe 
 
 El script para poblar la BD se encuentra en :  [Link SQL Script](https://github.com/XZeromarx/ProyectoAccesoSantoTomas/blob/master/src/model/database.sql) 📃
 
-### 🚀 Ejecutando la aplicación
+## 🚀 Ejecutando la aplicación
 para ejecutar la aplicación:
 ```sh
 java -jar "IngresoSantoTomas.jar"
 ```
 
+
+# 📕 Licencia 
+Este proyecto creado por [klawx3](https://github.com/klawx3) y [xzeromarkx](https://github.com/XZeromarx) esta bajo la licencia:
+> GNU GENERAL PUBLIC LICENSE
+> Version 3, 29 June 2007
