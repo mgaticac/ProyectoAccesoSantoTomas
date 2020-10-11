@@ -1,4 +1,4 @@
-package model;
+package service;
 
 import service.FPSensorVerificationService;
 import service.FPUserService;
@@ -14,6 +14,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.EnrollingListener;
+import model.FPSensor;
+import model.FPSensorBehivor;
+import model.FPUser;
+import model.SensorFingerListener;
+import model.VerificationListener;
 
 public class SensorAdministrator implements SensorFingerListener {
 
@@ -46,6 +52,10 @@ public class SensorAdministrator implements SensorFingerListener {
         if (sensorsSerialIds.isEmpty()) {
             log.warning("No sensors Detected");
         }
+    }
+    
+    public List<FPSensor> getSensors(){
+        return sensors;
     }
 
     public FPUserService getUserService() {

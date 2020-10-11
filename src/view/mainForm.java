@@ -37,9 +37,10 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.EnrollingListener;
+import model.FPSensor;
 import model.FPSensorBehivor;
 import model.FPUser;
-import model.SensorAdministrator;
+import service.SensorAdministrator;
 import model.VerificationListener;
 import service.FPSensorVerificationService;
 import service.FPUserService;
@@ -101,7 +102,15 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         sensorAdministrator.addEnrollingListener(this::enrollingEvent);
         sensorAdministrator.addVerificationListener(this::verificationEvent);
         listLastEnrollments();
+        funcionX();
 
+    }
+    
+    public void funcionX(){
+        List<FPSensor> sensors = sensorAdministrator.getSensors();
+        FPSensor sen = sensors.get(0);
+        FPSensorBehivor behivor = sen.getBehivor();
+        System.out.println("Monstado comportamiento sensor 0 :" + behivor);
     }
 
     @Override
