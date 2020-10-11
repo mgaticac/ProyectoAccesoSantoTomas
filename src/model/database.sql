@@ -34,7 +34,6 @@ CREATE TABLE history ( -- SELECT * FROM history
     id INT AUTO_INCREMENT,
     user_id_fk INT,
     register_date DATETIME,
-    temperature VARCHAR(10),
     PRIMARY KEY (id),
     FOREIGN KEY (user_id_fk) REFERENCES user(id)
 );

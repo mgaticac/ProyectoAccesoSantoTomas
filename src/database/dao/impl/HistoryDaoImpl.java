@@ -17,8 +17,8 @@ import java.util.logging.Logger;
  *
  * @author klawx
  */
-public class HistoryDaoImpl implements DaoHistorial{
-    
+public class HistoryDaoImpl implements DaoHistorial {
+
     public static Logger log = Logger.getLogger(HistoryDaoImpl.class.getName());
     private Conexion con;
 
@@ -27,8 +27,8 @@ public class HistoryDaoImpl implements DaoHistorial{
     }
 
     @Override
-    public void add(DBHistory t) {     
-        String sql = "INSERT INTO history VALUES(NULL, " + t.getUserId() + ", NOW(),'" + t.getObservation() + "');";
+    public void add(DBHistory t) {
+        String sql = "INSERT INTO history VALUES(NULL, " + t.getUserId() + ", NOW());";
         try {
             log.info(sql);
             con.ejecutar(sql);
@@ -51,5 +51,5 @@ public class HistoryDaoImpl implements DaoHistorial{
     public List<DBHistory> getAll() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

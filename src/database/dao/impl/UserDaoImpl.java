@@ -7,13 +7,9 @@ package database.dao.impl;
 
 import config.FPConfig;
 import database.Conexion;
-import database.Data;
 import database.dao.UserDao;
 import database.model.DBSede;
 import database.model.DBUser;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,8 +26,8 @@ public class UserDaoImpl implements UserDao {
     private Conexion con;
 
     private FPConfig config;
-    
-    public UserDaoImpl(Conexion con,FPConfig config) {
+
+    public UserDaoImpl(Conexion con, FPConfig config) {
         this.con = con;
         this.config = config;
     }
@@ -41,7 +36,7 @@ public class UserDaoImpl implements UserDao {
     public List<DBUser> getAll() {
         try {
             List<DBUser> userList = new ArrayList<>();
-            ResultSet rs = con.ejecutar("SELECT * FROM user;");
+            ResultSet rs = con.ejecutar("SELECT * FROM user WHERE institute_fk = " + config.getInstituteId() + ";");
             while (rs.next()) {
 
                 int id = rs.getInt("id");
@@ -65,7 +60,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void add(DBUser t) {
         String query = "INSERT INTO user (id, fullname, rut, user_type_id_fk, finger_print, institute_fk) VALUES (?,?,?,?,?,?);";
-        int id = config.getInstituteId();
+        int instituteId = config.getInstituteId();
         try {
             PreparedStatement pstmt = (PreparedStatement) con.getCon().prepareStatement(query);
             pstmt.setObject(1, null);
@@ -73,7 +68,7 @@ public class UserDaoImpl implements UserDao {
             pstmt.setString(3, t.getRut());
             pstmt.setInt(4, t.getUserTypeIdFk());
             pstmt.setBytes(5, t.getFingerPrint());
-            pstmt.setInt(6, id);
+            pstmt.setInt(6, instituteId);
 
             if (query.toLowerCase().startsWith("insert")
                     || query.toLowerCase().startsWith("update")
@@ -89,7 +84,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<DBUser> getUserById(int id) {
-        String sql = "SELECT * FROM user WHERE id = ?";
+        String sql = "SELECT * FROM user WHERE id = ? AND institute_fk = " + config.getInstituteId();
         try {
             PreparedStatement pstmt = (PreparedStatement) con.getCon().prepareStatement(sql);
             pstmt.setInt(1, id);
@@ -130,7 +125,7 @@ public class UserDaoImpl implements UserDao {
     public List<DBUser> getLatestEnrollments() {
         try {
             List<DBUser> userIdList = new ArrayList<>();
-            ResultSet rs = con.ejecutar("SELECT * from user ORDER BY id DESC LIMIT 15;");
+            ResultSet rs = con.ejecutar("SELECT * from user WHERE institute_fk = " + config.getInstituteId() + " ORDER BY id DESC LIMIT 15;");
             while (rs.next()) {
                 DBUser user = new DBUser();
                 user.setId(rs.getInt(1));
@@ -138,7 +133,7 @@ public class UserDaoImpl implements UserDao {
                 user.setRut(rs.getString(3));
                 userIdList.add(user);
             }
-            
+
             return userIdList;
         } catch (SQLException ex) {
             Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -153,9 +148,10 @@ public class UserDaoImpl implements UserDao {
             ResultSet rs = con.ejecutar("SELECT user.id, user.fullname, user.rut, history.register_date FROM history "
                     + "INNER JOIN user "
                     + "ON history.user_id_fk = user.id "
-                    + "WHERE history.register_date > DATE_SUB(CURDATE(), INTERVAL 1 DAY)"
+                    + "WHERE history.register_date > DATE_SUB(CURDATE(), INTERVAL 1 DAY) "
+                    + "AND institute_fk = " + config.getInstituteId() + " "
                     + "ORDER BY history.register_date ASC;");
-            
+
             while (rs.next()) {
                 DBUser user = new DBUser();
                 user.setId(rs.getInt(1));
@@ -172,8 +168,8 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Optional<DBUser> getUserByRut(String rut) {        
-        String sql = "SELECT * FROM user WHERE rut LIKE '" + rut + "';";
+    public Optional<DBUser> getUserByRut(String rut) {
+        String sql = "SELECT * FROM user WHERE rut LIKE '" + rut + "' AND institute_fk = " + config.getInstituteId() + ";";
         try {
             DBUser user = null;
             ResultSet rs = con.ejecutar(sql);

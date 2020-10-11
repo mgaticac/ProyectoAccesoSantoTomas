@@ -16,17 +16,18 @@ import java.util.List;
  * @author klawx
  */
 public class UserTypeDaoImpl implements UserTypeDao {
-    
+
     private Conexion con;
     private FPConfig config;
-    public UserTypeDaoImpl(Conexion con){
+
+    public UserTypeDaoImpl(Conexion con) {
         this.con = con;
 
     }
 
     @Override
     public void add(DBUserType t) {
-        
+
     }
 
     @Override
@@ -48,5 +49,5 @@ public class UserTypeDaoImpl implements UserTypeDao {
     public DBUserType getUserTypeById(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }
