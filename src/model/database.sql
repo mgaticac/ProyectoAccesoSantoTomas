@@ -131,5 +131,8 @@ CALL clone_user(20,1);
 
 
 
+SELECT * FROM user;
 
-
+SELECT @@global.time_zone
+UNION
+SELECT NOW();
