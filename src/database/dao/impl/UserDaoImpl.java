@@ -210,4 +210,31 @@ public class UserDaoImpl implements UserDao {
         return exists;
     }
 
+    @Override
+    public List<DBUser> getLatestVerified(int instituteId, int quantity) {
+
+        try {
+            String query = "SELECT user.fullname, user.rut, user_type.id FROM history\n"
+                    + " INNER JOIN user ON user.id = history.user_id_fk\n"
+                    + " INNER JOIN user_type ON user.user_type_id_fk = user_type.id\n"
+                    + " WHERE user.institute_fk = " + instituteId + "\n"
+                    + " ORDER BY history.register_date ASC LIMIT " + quantity + ";";
+            List<DBUser> usersHistoryRecords = new ArrayList<>();
+            ResultSet rs = con.ejecutar(query);
+            while (rs.next()) {
+                DBUser user = new DBUser();
+                user.setFullname(rs.getString(1));
+                user.setRut(rs.getString(2));
+                user.setUserTypeIdFk(rs.getInt(3));
+                usersHistoryRecords.add(user);
+            }
+
+            return usersHistoryRecords;
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, ex.toString(), ex);
+        }
+        return Collections.emptyList();
+
+    }
+
 }

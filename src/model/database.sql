@@ -41,12 +41,15 @@ CREATE TABLE history ( -- SELECT * FROM history
 
 
 
-INSERT INTO user_type VALUES(NULL,'student',100);
+
+
+
+INSERT INTO user_type VALUES(NULL,'Student',100);
 INSERT INTO user_type VALUES(NULL,'Teacher',85);
-INSERT INTO user_type VALUES(NULL,'personnel',75);
-INSERT INTO user_type VALUES(NULL,'provider',50);
-INSERT INTO user_type VALUES(NULL,'admin',0);
-INSERT INTO user_type VALUES(NULL,'technician',25);
+INSERT INTO user_type VALUES(NULL,'Personnel',75);
+INSERT INTO user_type VALUES(NULL,'Provider',50);
+INSERT INTO user_type VALUES(NULL,'Admin',0);
+INSERT INTO user_type VALUES(NULL,'Technician',25);
 
 
 INSERT INTO institute VALUES(NULL,'Santo Tomas Rancagua');
@@ -129,3 +132,9 @@ CALL clone_user(20,1);
 -- INNER JOIN user
 -- ON history.user_id_fk = user.id
 -- WHERE history.register_date > DATE_SUB(CURDATE(), INTERVAL 1 DAY);
+
+-- SELECT user.fullname, user.rut, user_type.id FROM history
+-- INNER JOIN user ON user.id = history.user_id_fk
+-- INNER JOIN user_type ON user.user_type_id_fk = user_type.id 
+-- WHERE user.institute_fk = x
+-- ORDER BY history.register_date ASC LIMIT x;

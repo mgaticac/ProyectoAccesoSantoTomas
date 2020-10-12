@@ -107,6 +107,7 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         sensorAdministrator.addEnrollingListener(this::enrollingEvent);
         sensorAdministrator.addVerificationListener(this::verificationEvent);
         listLastEnrollments();
+        listLastVerified();
         stt.start();
 
     }
@@ -254,11 +255,14 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         jScrollPane5 = new javax.swing.JScrollPane();
         dataTable = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
-        btnShowXRecords = new javax.swing.JButton();
+        btnShowXEnrollmentRecords = new javax.swing.JButton();
         spinnerEnrollmentsQuantity = new javax.swing.JSpinner();
         jPanel11 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableIdentifiedUsers = new javax.swing.JTable();
+        spinnerVerifiedQuantity = new javax.swing.JSpinner();
+        jLabel8 = new javax.swing.JLabel();
+        btnShowXVerifyRecords = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -624,12 +628,12 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel1.setText("Cantidad de registros a mostrar:");
 
-        btnShowXRecords.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnShowXRecords.setText("Actualizar");
-        btnShowXRecords.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        btnShowXRecords.addActionListener(new java.awt.event.ActionListener() {
+        btnShowXEnrollmentRecords.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnShowXEnrollmentRecords.setText("Actualizar");
+        btnShowXEnrollmentRecords.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnShowXEnrollmentRecords.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnShowXRecordsActionPerformed(evt);
+                btnShowXEnrollmentRecordsActionPerformed(evt);
             }
         });
 
@@ -650,7 +654,7 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
                         .addGap(18, 18, 18)
                         .addComponent(spinnerEnrollmentsQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnShowXRecords, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)))
+                        .addComponent(btnShowXEnrollmentRecords, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel8Layout.setVerticalGroup(
@@ -660,16 +664,16 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnShowXRecords, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnShowXEnrollmentRecords, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(spinnerEnrollmentsQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         jPanel11.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "Personas Identificadas", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 1, 18))); // NOI18N
 
-        jTable1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableIdentifiedUsers.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jTableIdentifiedUsers.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null}
             },
@@ -692,12 +696,27 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane4.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setResizable(false);
-            jTable1.getColumnModel().getColumn(1).setResizable(false);
-            jTable1.getColumnModel().getColumn(2).setResizable(false);
+        jScrollPane4.setViewportView(jTableIdentifiedUsers);
+        if (jTableIdentifiedUsers.getColumnModel().getColumnCount() > 0) {
+            jTableIdentifiedUsers.getColumnModel().getColumn(0).setResizable(false);
+            jTableIdentifiedUsers.getColumnModel().getColumn(1).setResizable(false);
+            jTableIdentifiedUsers.getColumnModel().getColumn(2).setResizable(false);
         }
+
+        spinnerVerifiedQuantity.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        spinnerVerifiedQuantity.setModel(new javax.swing.SpinnerNumberModel(15, 1, null, 1));
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel8.setText("Cantidad de registros a mostrar:");
+
+        btnShowXVerifyRecords.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnShowXVerifyRecords.setText("Actualizar");
+        btnShowXVerifyRecords.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnShowXVerifyRecords.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnShowXVerifyRecordsActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
@@ -705,14 +724,27 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel11Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel8)
+                        .addGap(18, 18, 18)
+                        .addComponent(spinnerVerifiedQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnShowXVerifyRecords, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE))
+                    .addComponent(jScrollPane4))
                 .addContainerGap())
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnShowXVerifyRecords, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(spinnerVerifiedQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -722,18 +754,18 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(749, Short.MAX_VALUE))
+                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
-                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(392, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Información de Registros", jPanel6);
@@ -830,16 +862,21 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         }
     }//GEN-LAST:event_btnConfirmDataActionPerformed
 
-    private void btnShowXRecordsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowXRecordsActionPerformed
+    private void btnShowXEnrollmentRecordsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowXEnrollmentRecordsActionPerformed
         listLastEnrollments();
-    }//GEN-LAST:event_btnShowXRecordsActionPerformed
+    }//GEN-LAST:event_btnShowXEnrollmentRecordsActionPerformed
+
+    private void btnShowXVerifyRecordsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowXVerifyRecordsActionPerformed
+        listLastVerified();
+    }//GEN-LAST:event_btnShowXVerifyRecordsActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelEnrollment;
     private javax.swing.JButton btnConfirmData;
     private javax.swing.JButton btnExportDailyData;
-    private javax.swing.JButton btnShowXRecords;
+    private javax.swing.JButton btnShowXEnrollmentRecords;
+    private javax.swing.JButton btnShowXVerifyRecords;
     private javax.swing.JComboBox<String> cbEnrollSensor;
     private javax.swing.JComboBox<String> cbUserType;
     private javax.swing.JTable dataTable;
@@ -851,6 +888,7 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
@@ -868,13 +906,14 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableIdentifiedUsers;
     private javax.swing.JTable jtableSensorBehivor;
     private javax.swing.JLabel lblHuella;
     private javax.swing.JLabel lblNombreIdentificated;
     private javax.swing.JLabel lblRutIdentificated;
     private javax.swing.JLabel lblTypeIdentificated;
     private javax.swing.JSpinner spinnerEnrollmentsQuantity;
+    private javax.swing.JSpinner spinnerVerifiedQuantity;
     private javax.swing.JTextArea txtAreaInfo;
     private javax.swing.JTextArea txtAreaState;
     private javax.swing.JTextField txtName;
@@ -978,6 +1017,46 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         dataTable.sizeColumnsToFit(WIDTH);
         dataTable.sizeColumnsToFit(HEIGHT);
 
+    }
+
+    private void listLastVerified() {
+        List<DBUser> latestVerifiedUsers = userDao.getLatestVerified(fpconfig.getInstituteId(), (int) spinnerVerifiedQuantity.getValue());
+        DefaultTableModel dtm = new DefaultTableModel();
+
+        dtm.addColumn("Nombre");
+        dtm.addColumn("Rut");
+        dtm.addColumn("Tipo de Usuario");
+
+        for (DBUser latestVerifiedUser : latestVerifiedUsers) {
+
+            String tipoPersona = "";
+            switch (latestVerifiedUser.getUserTypeIdFk()) {
+
+                case 1:
+                    tipoPersona = "Estudiante";
+                    break;
+                case 2:
+                    tipoPersona = "Docente";
+                    break;
+                case 3:
+                    tipoPersona = "Personal";
+                    break;
+                case 4:
+                    tipoPersona = "Proveedor";
+                    break;
+
+            }
+
+            String[] userData = new String[]{
+                latestVerifiedUser.getRut(), latestVerifiedUser.getFullname(), tipoPersona
+            };
+            dtm.addRow(userData);
+
+        }
+
+        jTableIdentifiedUsers.setModel(dtm);
+        jTableIdentifiedUsers.sizeColumnsToFit(WIDTH);
+        jTableIdentifiedUsers.sizeColumnsToFit(HEIGHT);
     }
 
     private void reStartEnrollmentService() {

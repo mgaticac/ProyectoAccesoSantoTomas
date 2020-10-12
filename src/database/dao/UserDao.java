@@ -22,6 +22,8 @@ public interface UserDao extends GenericCrud<DBUser> {
 
     List<DBUser> getLatestEnrollments(int instituteId, int quantity);
 
+    List<DBUser> getLatestVerified(int instituteId, int quantity);
+
     Optional<List<DBUser>> exportDailyData();
 
     Optional<DBUser> getUserByRut(String rut);
