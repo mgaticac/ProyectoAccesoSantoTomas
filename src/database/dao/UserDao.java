@@ -15,10 +15,16 @@ import java.util.Optional;
  * @author Kenshi
  */
 public interface UserDao extends GenericCrud<DBUser> {
+
     DBUser getAllUserBySede(DBSede sede);
+
     Optional<DBUser> getUserById(int id);
-    List<DBUser> getLatestEnrollments();
+
+    List<DBUser> getLatestEnrollments(int instituteId, int quantity);
+
     Optional<List<DBUser>> exportDailyData();
+
     Optional<DBUser> getUserByRut(String rut);
-    
+
+    boolean userRutExists(String rut);
 }

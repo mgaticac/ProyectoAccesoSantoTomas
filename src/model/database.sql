@@ -27,7 +27,8 @@ CREATE TABLE user ( -- SELECT * FROM user
     institute_fk INT,
     PRIMARY KEY (id),
     FOREIGN KEY (user_type_id_fk) REFERENCES user_type(id),
-    FOREIGN KEY (institute_fk) REFERENCES institute(id)
+    FOREIGN KEY (institute_fk) REFERENCES institute(id),
+    UNIQUE(rut)
 );
 
 CREATE TABLE history ( -- SELECT * FROM history
@@ -128,11 +129,3 @@ CALL clone_user(20,1);
 -- INNER JOIN user
 -- ON history.user_id_fk = user.id
 -- WHERE history.register_date > DATE_SUB(CURDATE(), INTERVAL 1 DAY);
-
-
-
-SELECT * FROM user;
-
-SELECT @@global.time_zone
-UNION
-SELECT NOW();

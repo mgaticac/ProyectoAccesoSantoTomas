@@ -122,15 +122,15 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<DBUser> getLatestEnrollments() {
+    public List<DBUser> getLatestEnrollments(int instituteId, int quantity) {
         try {
+            String query = "SELECT rut, fullname from user WHERE institute_fk = " + instituteId + " ORDER BY id DESC LIMIT " + quantity + ";";
             List<DBUser> userIdList = new ArrayList<>();
-            ResultSet rs = con.ejecutar("SELECT * from user WHERE institute_fk = " + config.getInstituteId() + " ORDER BY id DESC LIMIT 15;");
+            ResultSet rs = con.ejecutar(query);
             while (rs.next()) {
                 DBUser user = new DBUser();
-                user.setId(rs.getInt(1));
-                user.setFullname(rs.getString(2));
-                user.setRut(rs.getString(3));
+                user.setFullname(rs.getString(1));
+                user.setRut(rs.getString(2));
                 userIdList.add(user);
             }
 
@@ -187,6 +187,27 @@ public class UserDaoImpl implements UserDao {
             Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, ex.toString(), ex);
         }
         return Optional.empty();
+    }
+
+    @Override
+    public boolean userRutExists(String rut) {
+        boolean exists = false;
+        try {
+
+            String query = "SELECT rut from user WHERE rut LIKE '" + rut + "';";
+
+            ResultSet rs = con.ejecutar(query);
+            while (rs.next()) {
+                if (rut.equalsIgnoreCase(rs.getString(1))) {
+                    exists = true;
+                    break;
+                }
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return exists;
     }
 
 }
