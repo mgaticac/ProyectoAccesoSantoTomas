@@ -17,15 +17,19 @@ public class Conexion {
     private Connection con;
 
     public Conexion(String db,String host,String user,String passwd) throws ClassNotFoundException, SQLException {
-        String url = "jdbc:mysql://"+host+"/" + db + "?user="+user+"&password="+passwd+"&autoreconnect=true";
-        log.info("Conecction url string:" + url);
-        Class.forName("com.mysql.jdbc.Driver");
+        String url = "jdbc:mariadb://"+host+"/" + db + "?user="+user
+                + "&password="+ passwd
+                + "&autoReconnect=true"
+                //+ "&maxReconnects=50"
+                + "&connectTimeout=1800";
+        log.fine("Conecction url string:" + url);
+        Class.forName("org.mariadb.jdbc.Driver");
         con = DriverManager.getConnection(url);
         log.info("Conected to DB!");
     }
 
     public ResultSet ejecutar(String query) throws SQLException {
-        log.info("Executing Query:" + query);
+        log.fine("Executing Query:" + query);
         sen = con.createStatement();
 
         if (query.toLowerCase().startsWith("insert")

@@ -31,11 +31,11 @@ public class FPSensorVerificationService {
         matcher.setFARRequested(DPFPVerification.MEDIUM_SECURITY_FAR);
         Map<FPUser, DPFPVerificationResult> trueVerificationsResults = new HashMap<>();
 
-        log.info("Verifying user in user database...");
+        log.fine("Verifying user in user database...");
         List<FPUser> allUsers = fpUserService.getAllUsers();
         for (FPUser fpUser : allUsers) {
             DPFPVerificationResult verify = matcher.verify(featureSet, fpUser.getTemplate());
-            log.fine("Verified user id: '" + fpUser.getUserId() + "'\tFalse accept Rate: '" + verify.getFalseAcceptRate() + "'");
+            log.log(Level.FINE, "Verified user id: ''{0}''\tFalse accept Rate: ''{1}''", new Object[]{fpUser.getUserId(), verify.getFalseAcceptRate()});
 
             if (verify.isVerified()) {
                 double FAR = (double) verify.getFalseAcceptRate() / DPFPVerification.PROBABILITY_ONE;
@@ -43,7 +43,7 @@ public class FPSensorVerificationService {
                 trueVerificationsResults.put(fpUser, verify);
             }
         }
-        log.info("Verified " + allUsers.size()+ " Numbers of users");
+        log.log(Level.FINE, "Verified {0} Numbers of users", allUsers.size());
 
         if (trueVerificationsResults.isEmpty()) {
             log.info("No users match");
@@ -55,7 +55,7 @@ public class FPSensorVerificationService {
                     .findFirst()
                     .get()
                     .getKey();
-            log.info("User match: " + key);
+            log.log(Level.FINE, "User match: {0}", key);
             return Optional.of(key);
         } else {
             log.warning("More than 1 user founded! -> Adjust your match FAR requested");
@@ -72,7 +72,7 @@ public class FPSensorVerificationService {
                 }
                 i++;
             }
-            log.info("Returning user min FAR user:" + minUser);
+            log.log(Level.FINE, "Returning user min FAR user: {0}", minUser);
             return Optional.of(minUser);
         }
     }

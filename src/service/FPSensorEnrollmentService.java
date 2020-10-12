@@ -8,6 +8,8 @@ import com.digitalpersona.onetouch.DPFPTemplate;
 import com.digitalpersona.onetouch.processing.DPFPEnrollment;
 import com.digitalpersona.onetouch.processing.DPFPImageQualityException;
 import java.awt.Image;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.EnrollingListener;
 import model.FPSensor;
 import util.SensorUtils;
@@ -53,8 +55,8 @@ public class FPSensorEnrollmentService extends FPSensor implements EnrollingList
                     }
                 }
 
-            } catch (DPFPImageQualityException e) {
-                e.printStackTrace();
+            } catch (DPFPImageQualityException ex) {
+                Logger.getLogger(FPSensorEnrollmentService.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 

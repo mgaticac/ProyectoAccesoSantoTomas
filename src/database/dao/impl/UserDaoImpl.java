@@ -52,7 +52,7 @@ public class UserDaoImpl implements UserDao {
             }
             return userList;
         } catch (SQLException ex) {
-            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, ex.toString(), ex);
         }
         return Collections.emptyList();
     }
@@ -78,7 +78,7 @@ public class UserDaoImpl implements UserDao {
             }
             log.info("Executing Query (insertHuella):" + pstmt.toString());
         } catch (SQLException ex) {
-            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, ex.toString(), ex);
         }
     }
 
@@ -101,7 +101,7 @@ public class UserDaoImpl implements UserDao {
             }
             pstmt.close();
         } catch (SQLException ex) {
-            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, ex.toString(), ex);
         }
         return Optional.empty();
     }
@@ -136,7 +136,7 @@ public class UserDaoImpl implements UserDao {
 
             return userIdList;
         } catch (SQLException ex) {
-            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, ex.toString(), ex);
         }
         return Collections.emptyList();
     }
@@ -162,7 +162,7 @@ public class UserDaoImpl implements UserDao {
             }
             return Optional.of(userList);
         } catch (SQLException ex) {
-            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, ex.toString(), ex);
         }
         return Optional.empty();
     }
@@ -184,7 +184,7 @@ public class UserDaoImpl implements UserDao {
             }
             return Optional.of(user);
         } catch (SQLException ex) {
-            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, ex.toString(), ex);
         }
         return Optional.empty();
     }

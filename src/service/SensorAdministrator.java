@@ -142,8 +142,8 @@ public class SensorAdministrator implements SensorFingerListener {
             DPFPFeatureSet featureSet = SensorUtils.getFeatureSet(sample, DPFPDataPurpose.DATA_PURPOSE_VERIFICATION);
             Optional<FPUser> verify = verificationService.verify(featureSet);
             fireValidatingEvent(verify);
-        } catch (DPFPImageQualityException e) {
-            e.printStackTrace();
+        } catch (DPFPImageQualityException ex) {
+            log.log(Level.SEVERE,ex.toString(),ex);
         }
 
     }

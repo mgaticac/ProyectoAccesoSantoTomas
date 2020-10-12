@@ -152,7 +152,7 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
                 dibujarHuella(img);
 
                 if (features != null) {
-                    log.info("Enroller status:" + dPFPEnrollment.getTemplateStatus() + "\tfeatures:" + dPFPEnrollment.getFeaturesNeeded());
+                    log.fine("Enroller status:" + dPFPEnrollment.getTemplateStatus() + "\tfeatures:" + dPFPEnrollment.getFeaturesNeeded());
                     switch (dPFPEnrollment.getFeaturesNeeded()) {
                         case 1:
                             txtAreaInfo.setText("Falta " + dPFPEnrollment.getFeaturesNeeded() + " muestra, porfavor continue.");

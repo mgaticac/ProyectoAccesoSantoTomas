@@ -30,7 +30,7 @@ public class HistoryDaoImpl implements DaoHistorial {
     public void add(DBHistory t) {
         String sql = "INSERT INTO history VALUES(NULL, " + t.getUserId() + ", NOW());";
         try {
-            log.info(sql);
+            log.fine(sql);
             con.ejecutar(sql);
         } catch (SQLException ex) {
             Logger.getLogger(HistoryDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
