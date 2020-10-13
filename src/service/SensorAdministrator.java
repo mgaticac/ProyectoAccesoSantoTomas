@@ -1,7 +1,5 @@
 package service;
 
-import service.FPSensorVerificationService;
-import service.FPUserService;
 import util.SensorUtils;
 import com.digitalpersona.onetouch.DPFPDataPurpose;
 import com.digitalpersona.onetouch.DPFPFeatureSet;
@@ -53,8 +51,8 @@ public class SensorAdministrator implements SensorFingerListener {
             log.warning("No sensors Detected");
         }
     }
-    
-    public List<FPSensor> getSensors(){
+
+    public List<FPSensor> getSensors() {
         return sensors;
     }
 
@@ -117,23 +115,21 @@ public class SensorAdministrator implements SensorFingerListener {
     public void dataAdquired(String sensorId, FPSensorBehivor behivor, DPFPSample sample) {
         switch (behivor) {
             case ENROLLING:
-                log.info("Sensor " + sensorId + " is try to enrolling");
+                log.log(Level.INFO, "Sensor {0} is try to enrolling", sensorId);
                 enrolling(sample);
                 break;
             case VALIDATING:
-                log.info("Sensor " + sensorId + " is try to validate");
+                log.log(Level.INFO, "Sensor {0} is try to validate", sensorId);
                  {
                     try {
                         validating(sample);
-                    } catch (ClassNotFoundException ex) {
-                        Logger.getLogger(SensorAdministrator.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (SQLException ex) {
+                    } catch (ClassNotFoundException | SQLException ex) {
                         Logger.getLogger(SensorAdministrator.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
                 break;
             case NONE:
-                log.warning("Sensor " + sensorId + " is in NONE status");
+                log.log(Level.WARNING, "Sensor {0} is in NONE status", sensorId);
         }
     }
 
@@ -143,7 +139,7 @@ public class SensorAdministrator implements SensorFingerListener {
             Optional<FPUser> verify = verificationService.verify(featureSet);
             fireValidatingEvent(verify);
         } catch (DPFPImageQualityException ex) {
-            log.log(Level.SEVERE,ex.toString(),ex);
+            log.log(Level.SEVERE, ex.toString(), ex);
         }
 
     }

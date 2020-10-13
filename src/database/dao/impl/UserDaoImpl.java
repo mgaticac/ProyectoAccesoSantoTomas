@@ -76,7 +76,7 @@ public class UserDaoImpl implements UserDao {
                 pstmt.execute();
                 pstmt.close();
             }
-            log.info("Executing Query (insertHuella):" + pstmt.toString());
+            log.log(Level.INFO, "Executing Query (insertHuella):{0}", pstmt.toString());
         } catch (SQLException ex) {
             Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, ex.toString(), ex);
         }

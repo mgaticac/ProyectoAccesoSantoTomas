@@ -10,6 +10,7 @@ import com.digitalpersona.onetouch.capture.event.DPFPReaderStatusEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class FPSensor implements DPFPDataListener, Runnable {
@@ -39,14 +40,14 @@ public class FPSensor implements DPFPDataListener, Runnable {
         capture.addReaderStatusListener(new DPFPReaderStatusAdapter() {
             public void readerConnected(DPFPReaderStatusEvent e) {
                 if (lastStatus != e.getReaderStatus()) {
-                    log.info("Reader " + serialId + " is connected");
+                    log.log(Level.INFO, "Reader {0} is connected", serialId);
                 }
                 lastStatus = e.getReaderStatus();
             }
 
             public void readerDisconnected(DPFPReaderStatusEvent e) {
                 if (lastStatus != e.getReaderStatus()) {
-                    log.info("Reader  " + serialId + " is disconnected");
+                    log.log(Level.INFO, "Reader  {0} is disconnected", serialId);
                 }
                 lastStatus = e.getReaderStatus();
             }
@@ -59,7 +60,7 @@ public class FPSensor implements DPFPDataListener, Runnable {
     }
 
     public void setBehivor(FPSensorBehivor behivor) {
-        log.info("Changing sensor " + serialId + " to " + behivor);
+        log.log(Level.INFO, "Changing sensor {0} to {1}", new Object[]{serialId, behivor});
         this.behivor = behivor;
     }
 
@@ -78,7 +79,7 @@ public class FPSensor implements DPFPDataListener, Runnable {
 
     public void startReading() {
         if (!capture.isStarted()) {
-            log.info("Sensor " + serialId + " Started");
+            log.log(Level.INFO, "Sensor {0} Started", serialId);
             thread.start();
         }
 
@@ -86,7 +87,7 @@ public class FPSensor implements DPFPDataListener, Runnable {
 
     public void stopReading() {
         if (capture.isStarted()) {
-            log.info("Sensor " + serialId + " Stopped");
+            log.log(Level.INFO, "Sensor {0} Stopped", serialId);
             capture.stopCapture();
         }
     }
@@ -109,5 +110,5 @@ public class FPSensor implements DPFPDataListener, Runnable {
     public void run() {
         capture.startCapture();
     }
-    
+
 }

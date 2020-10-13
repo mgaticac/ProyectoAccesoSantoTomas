@@ -34,7 +34,7 @@ public class Main {
                     "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Sin el archivo de configuración inicial -> reporte al wn",
+            JOptionPane.showMessageDialog(null, "Sin el archivo de configuración inicial -> reporte al admininstrador",
                     "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
 

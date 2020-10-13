@@ -171,7 +171,6 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
 
                             DPFPTemplate template = dPFPEnrollment.getTemplate();
                             DBUser dbUser = new DBUser(txtName.getText(), txtRut.getText(), cbUserType.getSelectedIndex(), template.serialize());
-                            System.out.println(dbUser.toString());
                             userDao.add(dbUser);
                             dPFPEnrollment.clear();
                             capture.stopCapture();
@@ -199,14 +198,20 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
                                 + "¿Desea intentarlo nuevamente?"),
                         "Error",
                         JOptionPane.YES_NO_CANCEL_OPTION);
-                if (choice == JOptionPane.NO_OPTION) {
-                    sensorAdministrator.changeSensorBehivor(cbEnrollSensor.getSelectedItem().toString(), FPSensorBehivor.VALIDATING);
-                    clearEnrollFrame();
-                } else if (choice == JOptionPane.CANCEL_OPTION) {
-                    sensorAdministrator.changeSensorBehivor(cbEnrollSensor.getSelectedItem().toString(), FPSensorBehivor.VALIDATING);
-                    clearEnrollFrame();
-                } else if (choice == JOptionPane.YES_OPTION) {
-                    reStartEnrollmentService();
+                switch (choice) {
+                    case JOptionPane.NO_OPTION:
+                        sensorAdministrator.changeSensorBehivor(cbEnrollSensor.getSelectedItem().toString(), FPSensorBehivor.VALIDATING);
+                        clearEnrollFrame();
+                        break;
+                    case JOptionPane.CANCEL_OPTION:
+                        sensorAdministrator.changeSensorBehivor(cbEnrollSensor.getSelectedItem().toString(), FPSensorBehivor.VALIDATING);
+                        clearEnrollFrame();
+                        break;
+                    case JOptionPane.YES_OPTION:
+                        reStartEnrollmentService();
+                        break;
+                    default:
+                        break;
                 }
             }
         }
@@ -805,8 +810,8 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
                     }
                     FileWriter stream = new FileWriter(file);
                     String[] columnTitle = {"ID Usuario;", "Nombre;", "Rut;", "Fecha Verificacion\n"};
-                    for (int i = 0; i < columnTitle.length; i++) {
-                        stream.write(columnTitle[i]);
+                    for (String columnTitle1 : columnTitle) {
+                        stream.write(columnTitle1);
                     }
                     Optional<List<DBUser>> exportDailyData = userDao.exportDailyData();
                     if (exportDailyData.isPresent()) {
@@ -850,8 +855,8 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
                 btnCancelEnrollment.setEnabled(true);
 
                 confirmEnrollmentData();
-
                 reStartEnrollmentService();
+
             } else {
                 JOptionPane.showMessageDialog(null, "Rut ya existe, porfavor verifique la información");
             }
@@ -1011,12 +1016,11 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         dtm.addColumn("Nombre");
         dtm.addColumn("Rut");
 
-        for (DBUser userinfo : latestEnrolledUsers) {
-            String[] userData = new String[]{
-                userinfo.getRut(), userinfo.getFullname()
-            };
+        latestEnrolledUsers.stream().map((userinfo) -> new String[]{
+            userinfo.getRut(), userinfo.getFullname()
+        }).forEachOrdered((userData) -> {
             dtm.addRow(userData);
-        }
+        });
         dataTable.setModel(dtm);
         dataTable.sizeColumnsToFit(WIDTH);
         dataTable.sizeColumnsToFit(HEIGHT);
@@ -1079,13 +1083,11 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         dtm.addColumn("Sensor ID");
         dtm.addColumn("Comportamiento");
 
-        for (FPSensor sensor : sensors) {
-            String[] sensorData = new String[]{
-                String.valueOf(sensor.getSerialId()), sensor.getBehivor().toString()
-            };
+        sensors.stream().map((sensor) -> new String[]{
+            String.valueOf(sensor.getSerialId()), sensor.getBehivor().toString()
+        }).forEachOrdered((sensorData) -> {
             dtm.addRow(sensorData);
-
-        }
+        });
         jtableSensorBehivor.setModel(dtm);
         jtableSensorBehivor.sizeColumnsToFit(WIDTH);
 
@@ -1114,12 +1116,8 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
 
     class VerifyInformationTimer extends Thread implements Runnable {
 
-        Timer timer = new Timer(10000, new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                clearVerifyInfo();
-            }
+        Timer timer = new Timer(10000, (ActionEvent e) -> {
+            clearVerifyInfo();
         });
     }
 

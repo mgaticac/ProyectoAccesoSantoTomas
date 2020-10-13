@@ -5,7 +5,6 @@
  */
 package config;
 
-import static config.FPConfig.CONFIG_URL;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,7 +26,7 @@ public class LoggingConfig {
             System.err.println("Executing without logging Config, NOT FOUNDED!");
             System.err.println(ex.toString());
             System.setProperty("java.util.logging.SimpleFormatter.format",
-                "[%1$tF %1$tT] [%4$-7s] [%2$-45s] %5$s %n");
+                    "[%1$tF %1$tT] [%4$-7s] [%2$-45s] %5$s %n");
         }
     }
 
