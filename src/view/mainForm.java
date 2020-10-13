@@ -23,18 +23,14 @@ import database.dao.impl.HistoryDaoImpl;
 import database.dao.impl.UserDaoImpl;
 import database.model.DBHistory;
 import database.model.DBUser;
-import java.awt.Color;
 import java.awt.HeadlessException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Properties;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -57,6 +53,7 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
 
     //UI
     SensorTableThread stt = new SensorTableThread();
+//    VerifyInformationThread vit = new VerifyInformationThread();
 
     //DATA
     private Conexion connection;
@@ -250,6 +247,7 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         cbEnrollSensor = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
         btnCancelEnrollment = new javax.swing.JButton();
+        time = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
@@ -549,6 +547,8 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
                 .addContainerGap())
         );
 
+        time.setText("jLabel11");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -559,17 +559,16 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap())
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(218, 218, 218)
+                        .addComponent(time)
+                        .addGap(168, 168, 168)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -583,8 +582,13 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(26, 26, 26)
+                                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(132, 132, 132)
+                                .addComponent(time)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -726,12 +730,12 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
                 .addContainerGap()
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel11Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel8)
                         .addGap(18, 18, 18)
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(spinnerVerifiedQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnShowXVerifyRecords, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE))
+                        .addComponent(btnShowXVerifyRecords, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE))
                     .addComponent(jScrollPane4))
                 .addContainerGap())
         );
@@ -914,6 +918,7 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
     private javax.swing.JLabel lblTypeIdentificated;
     private javax.swing.JSpinner spinnerEnrollmentsQuantity;
     private javax.swing.JSpinner spinnerVerifiedQuantity;
+    private javax.swing.JLabel time;
     private javax.swing.JTextArea txtAreaInfo;
     private javax.swing.JTextArea txtAreaState;
     private javax.swing.JTextField txtName;
@@ -993,9 +998,19 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
             history.setUserId(fpUser.getUserId());
 
             histDao.add(history);
+            listLastVerified();
 
         } else { // TODO: generar manejo
             log.warning("Rut not founded");
+        }
+
+        if (!vit.isAlive()) {
+            System.out.println("Iniciado");
+            vit.start();
+        } else {
+            System.out.println("Reiniciado");
+            vit = new VerifyInformationThread();
+            vit.start();
         }
 
     }
@@ -1004,9 +1019,9 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
 
         List<DBUser> latestEnrolledUsers = userDao.getLatestEnrollments(fpconfig.getInstituteId(), (int) spinnerEnrollmentsQuantity.getValue());
         DefaultTableModel dtm = new DefaultTableModel();
-
-        dtm.addColumn("Rut");
         dtm.addColumn("Nombre");
+        dtm.addColumn("Rut");
+
         for (DBUser userinfo : latestEnrolledUsers) {
             String[] userData = new String[]{
                 userinfo.getRut(), userinfo.getFullname()
@@ -1026,6 +1041,7 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         dtm.addColumn("Nombre");
         dtm.addColumn("Rut");
         dtm.addColumn("Tipo de Usuario");
+        dtm.addColumn("Fecha Ingreso");
 
         for (DBUser latestVerifiedUser : latestVerifiedUsers) {
 
@@ -1048,7 +1064,7 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
             }
 
             String[] userData = new String[]{
-                latestVerifiedUser.getRut(), latestVerifiedUser.getFullname(), tipoPersona
+                latestVerifiedUser.getFullname(), latestVerifiedUser.getRut(), tipoPersona, latestVerifiedUser.getVerifyDate()
             };
             dtm.addRow(userData);
 
@@ -1056,7 +1072,7 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
 
         jTableIdentifiedUsers.setModel(dtm);
         jTableIdentifiedUsers.sizeColumnsToFit(WIDTH);
-        jTableIdentifiedUsers.sizeColumnsToFit(HEIGHT);
+
     }
 
     private void reStartEnrollmentService() {
@@ -1091,6 +1107,7 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
     class SensorTableThread extends Thread implements Runnable {
 
         public SensorTableThread() {
+
         }
 
         @Override
@@ -1104,6 +1121,39 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
                 }
             }
         }
+    }
+
+//    class VerifyInformationThread extends Thread implements Runnable {
+//
+//        public VerifyInformationThread() {
+//
+//        }
+//
+//        @Override
+//        public void run() {
+//            int cont = 1;
+//            try {
+//
+//                while (true) {
+//                    Thread.sleep(1000);
+//                    time.setText(String.valueOf(cont++));
+//                    if (cont == 10) {
+//                        break;
+//                    }
+//
+//                }
+//            } catch (InterruptedException ex) {
+//                Logger.getLogger(mainForm.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//            clearVerifyInfo();
+//
+//        }
+//    }
+    public void clearVerifyInfo() {
+        lblNombreIdentificated.setText("");
+        lblRutIdentificated.setText("");
+        lblTypeIdentificated.setText("");
+        txtAreaState.setText("");
     }
 
 }

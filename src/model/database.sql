@@ -117,24 +117,19 @@ DELIMITER ;
 
 CALL clone_user(20,1);
 
+
+
+SELECT *
+FROM history
+INNER JOIN user
+ON history.user_id_fk = user.id
+WHERE history.register_date > DATE_SUB(CURDATE(), INTERVAL 1 DAY);
+
+SELECT user.fullname, user.rut, user_type.id FROM history
+INNER JOIN user ON user.id = history.user_id_fk
+INNER JOIN user_type ON user.user_type_id_fk = user_type.id 
+WHERE user.institute_fk = x
+ORDER BY history.register_date ASC LIMIT x;
+
+
 */
-
--- SELECT * INTO OUTFILE 'C:/your-directory/your-filename.csv'
---         FIELDS TERMINATED BY ','
---         ENCLOSED BY '"'
---         ESCAPED BY '\\'
---         LINES TERMINATED BY '\n'
---         FROM tableName
--- 
-
--- SELECT *
--- FROM history
--- INNER JOIN user
--- ON history.user_id_fk = user.id
--- WHERE history.register_date > DATE_SUB(CURDATE(), INTERVAL 1 DAY);
-
--- SELECT user.fullname, user.rut, user_type.id FROM history
--- INNER JOIN user ON user.id = history.user_id_fk
--- INNER JOIN user_type ON user.user_type_id_fk = user_type.id 
--- WHERE user.institute_fk = x
--- ORDER BY history.register_date ASC LIMIT x;
