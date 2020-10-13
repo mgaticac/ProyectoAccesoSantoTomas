@@ -1004,14 +1004,14 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
             log.warning("Rut not founded");
         }
 
-        if (!vit.isAlive()) {
-            System.out.println("Iniciado");
-            vit.start();
-        } else {
-            System.out.println("Reiniciado");
-            vit = new VerifyInformationThread();
-            vit.start();
-        }
+//        if (!vit.isAlive()) {
+//            System.out.println("Iniciado");
+//            vit.start();
+//        } else {
+//            System.out.println("Reiniciado");
+//            vit = new VerifyInformationThread();
+//            vit.start();
+//        }
 
     }
 
