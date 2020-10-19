@@ -238,4 +238,32 @@ public class UserDaoImpl implements UserDao {
 
     }
 
+    @Override
+    public Optional<List<DBUser>> exportDateData(String fecha1, String fecha2) {
+
+        try {
+            List<DBUser> userList = new ArrayList<>();
+            ResultSet rs = con.ejecutar("SELECT user.id, user.fullname, user.rut, history.register_date FROM history "
+                    + "INNER JOIN user "
+                    + "ON history.user_id_fk = user.id "
+                    + "WHERE history.register_date BETWEEN '" + fecha1 + "' AND '" + fecha2 + "' "
+                    + "AND institute_fk = " + config.getInstituteId() + " "
+                    + "ORDER BY history.register_date ASC;");
+
+            while (rs.next()) {
+                DBUser user = new DBUser();
+                user.setId(rs.getInt(1));
+                user.setFullname(rs.getString(2));
+                user.setRut(rs.getString(3));
+                user.setVerifyDate(rs.getString(4));
+                userList.add(user);
+            }
+            return Optional.of(userList);
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDaoImpl.class.getName()).log(Level.SEVERE, ex.toString(), ex);
+        }
+        return Optional.empty();
+
+    }
+
 }

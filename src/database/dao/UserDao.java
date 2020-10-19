@@ -29,4 +29,6 @@ public interface UserDao extends GenericCrud<DBUser> {
     Optional<DBUser> getUserByRut(String rut);
 
     boolean userRutExists(String rut);
+
+    Optional<List<DBUser>> exportDateData(String fecha1, String fecha2);
 }

@@ -25,7 +25,6 @@ import database.model.DBHistory;
 import database.model.DBUser;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -76,6 +75,34 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         this.fpconfig = fpconfig;
         // GUI
         initComponents();
+        jDateN1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jDateN1.setDateFormatString("dd/MM/yyyy");
+        jDateN2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jDateN2.setDateFormatString("dd/MM/yyyy");
+
+        for (int i = 0; i < 24; i++) {
+            int minute = 0;
+            for (int j = 0; j < 4; j++) {
+
+                if (i == 0 && minute == 0) {
+                    cbHourPicker1.addItem(String.valueOf("00" + ":" + "00"));
+                    cbHourPicker2.addItem(String.valueOf("00" + ":" + "00"));
+                } else if (i == 0) {
+                    cbHourPicker1.addItem(String.valueOf("00" + ":" + minute));
+                    cbHourPicker2.addItem(String.valueOf("00" + ":" + minute));
+                } else if (minute == 0) {
+                    cbHourPicker1.addItem(String.valueOf(i + ":" + "00"));
+                    cbHourPicker2.addItem(String.valueOf(i + ":" + "00"));
+                } else {
+                    cbHourPicker1.addItem(String.valueOf(i + ":" + minute));
+                    cbHourPicker2.addItem(String.valueOf(i + ":" + minute));
+                }
+
+                minute += 15;
+
+            }
+
+        }
 
         setLocationRelativeTo(null);
         lblHuella.setPreferredSize(new Dimension(300, 250));
@@ -235,6 +262,15 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         txtAreaState = new javax.swing.JTextArea();
         jPanel10 = new javax.swing.JPanel();
         btnExportDailyData = new javax.swing.JButton();
+        jDateN1 = new com.toedter.calendar.JDateChooser();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jDateN2 = new com.toedter.calendar.JDateChooser();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        cbHourPicker1 = new javax.swing.JComboBox<>();
+        cbHourPicker2 = new javax.swing.JComboBox<>();
+        last24HoursInformCheckbox = new javax.swing.JCheckBox();
         jPanel7 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jtableSensorBehivor = new javax.swing.JTable();
@@ -310,7 +346,7 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
                     .addComponent(jLabel4)
                     .addComponent(jLabel6)
                     .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblTypeIdentificated, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblNombreIdentificated, javax.swing.GroupLayout.PREFERRED_SIZE, 428, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -349,10 +385,41 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "Informe", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
 
         btnExportDailyData.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        btnExportDailyData.setText("Exportar informe del día");
+        btnExportDailyData.setText("Exportar informe");
         btnExportDailyData.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExportDailyDataActionPerformed(evt);
+            }
+        });
+
+        jDateN1.setDate(new Date()
+        );
+
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel11.setText("Desde:");
+
+        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel13.setText("Hasta:");
+
+        jDateN2.setDate(new Date());
+
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel12.setText("a las ");
+
+        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel14.setText("a las");
+
+        cbHourPicker1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        cbHourPicker1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione la hora" }));
+
+        cbHourPicker2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        cbHourPicker2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione la hora" }));
+
+        last24HoursInformCheckbox.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        last24HoursInformCheckbox.setText("¿Exportar informe de las ultimas 24 horas?");
+        last24HoursInformCheckbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                last24HoursInformCheckboxActionPerformed(evt);
             }
         });
 
@@ -361,15 +428,56 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
-                .addGap(129, 129, 129)
-                .addComponent(btnExportDailyData, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addComponent(jDateN1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel12))
+                    .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addComponent(jDateN2, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cbHourPicker2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbHourPicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnExportDailyData, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(last24HoursInformCheckbox)
+                .addGap(129, 129, 129))
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
-                .addComponent(btnExportDailyData, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 17, Short.MAX_VALUE))
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(cbHourPicker1))
+                            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jDateN1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(24, 24, 24)
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jDateN2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cbHourPicker2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(btnExportDailyData, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addComponent(last24HoursInformCheckbox)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "Información actual sensores", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 18)), "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 18))); // NOI18N
@@ -417,8 +525,8 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "Huella Digital", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 1, 18))); // NOI18N
@@ -443,7 +551,7 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 656, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel9Layout.setVerticalGroup(
@@ -525,7 +633,7 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
                             .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(cbUserType, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(cbEnrollSensor, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -558,40 +666,40 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(0, 17, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(208, 208, 208)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addGap(199, 199, 199)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(0, 0, 0))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Menú Principal", jPanel1);
@@ -733,7 +841,7 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(spinnerVerifiedQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnShowXVerifyRecords, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE))
+                        .addComponent(btnShowXVerifyRecords, javax.swing.GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE))
                     .addComponent(jScrollPane4))
                 .addContainerGap())
         );
@@ -767,72 +875,40 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(392, Short.MAX_VALUE))
+                .addContainerGap(403, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Información de Registros", jPanel6);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
-        );
+        getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnExportDailyDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportDailyDataActionPerformed
         //Exportar informe del día en formato CSV y ordenarlo en un archivo excel o pdf
+        SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
 
-        JFileChooser chooser = new JFileChooser();
-        while (true) {
-            if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-                try {
-                    File file = chooser.getSelectedFile();
-                    if (!file.toString().toLowerCase().endsWith(".csv")) {
-                        file = new File(file.toString() + ".csv");
-                    }
-                    if (file.exists()) {
-                        int choice = JOptionPane.showConfirmDialog(this,
-                                String.format("El Archivo \"%1$s\" ya existe.\n¿Quiere reemplazarlo?", file.toString()),
-                                "Guardar Informe",
-                                JOptionPane.YES_NO_CANCEL_OPTION);
-                        if (choice == JOptionPane.NO_OPTION) {
-                            continue;
-                        } else if (choice == JOptionPane.CANCEL_OPTION) {
-                            break;
-                        }
-                    }
-                    FileWriter stream = new FileWriter(file);
-                    String[] columnTitle = {"ID Usuario;", "Nombre;", "Rut;", "Fecha Verificacion\n"};
-                    for (String columnTitle1 : columnTitle) {
-                        stream.write(columnTitle1);
-                    }
-                    Optional<List<DBUser>> exportDailyData = userDao.exportDailyData();
-                    if (exportDailyData.isPresent()) {
-                        List<DBUser> listDailyUsers = exportDailyData.get();
-                        for (DBUser user : listDailyUsers) {
-                            stream.write(user.getId() + ";");
-                            stream.write(user.getFullname() + ";");
-                            stream.write(user.getRut() + ";");
-                            stream.write(user.getVerifyDate() + "\n");
-                        }
-                    } else {
-                        log.warning("No se encontraron registros");
-                    }
-                    stream.close();
-                } catch (HeadlessException | IOException ex) {
-                    JOptionPane.showMessageDialog(this, ex.getLocalizedMessage(), "Guardar Informe", JOptionPane.ERROR_MESSAGE);
+        if ((!jDateN1.getDate().after(new Date())) && (!jDateN2.getDate().after(new Date()))) {//si todo ok (fecha no mayor al día de hoy y ambas seleccionadas
+
+            if (last24HoursInformCheckbox.isSelected()) {
+                saveFileToDisk();
+                log.info("Saving file within 24 hours");
+            } else {
+                if ((!(cbHourPicker1.getSelectedIndex() == 0) && !(cbHourPicker2.getSelectedIndex() == 0))) {
+                    String fecha1 = sdf.format(jDateN1.getDate()).concat(" " + cbHourPicker1.getSelectedItem().toString());
+                    String fecha2 = sdf.format(jDateN2.getDate()).concat(" " + cbHourPicker2.getSelectedItem().toString());
+                    log.info("Saving file with dates between: " + fecha1 + " And " + fecha2);
+
+                    saveFileToDisk(fecha1, fecha2);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Porfavor seleccione las horas en las que desea guardar el informe");
                 }
             }
-            break;
 
         }
+
+
     }//GEN-LAST:event_btnExportDailyDataActionPerformed
 
     private void btnCancelEnrollmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelEnrollmentActionPerformed
@@ -872,6 +948,20 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         listLastVerified();
     }//GEN-LAST:event_btnShowXVerifyRecordsActionPerformed
 
+    private void last24HoursInformCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_last24HoursInformCheckboxActionPerformed
+        if (last24HoursInformCheckbox.isSelected()) {
+            cbHourPicker1.setEnabled(false);
+            jDateN1.setEnabled(false);
+            cbHourPicker2.setEnabled(false);
+            jDateN2.setEnabled(false);
+        } else {
+            cbHourPicker1.setEnabled(true);
+            jDateN1.setEnabled(true);
+            cbHourPicker2.setEnabled(true);
+            jDateN2.setEnabled(true);
+        }
+    }//GEN-LAST:event_last24HoursInformCheckboxActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelEnrollment;
@@ -880,10 +970,18 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
     private javax.swing.JButton btnShowXEnrollmentRecords;
     private javax.swing.JButton btnShowXVerifyRecords;
     private javax.swing.JComboBox<String> cbEnrollSensor;
+    private javax.swing.JComboBox<String> cbHourPicker1;
+    private javax.swing.JComboBox<String> cbHourPicker2;
     private javax.swing.JComboBox<String> cbUserType;
     private javax.swing.JTable dataTable;
+    private com.toedter.calendar.JDateChooser jDateN1;
+    private com.toedter.calendar.JDateChooser jDateN2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -910,6 +1008,7 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTableIdentifiedUsers;
     private javax.swing.JTable jtableSensorBehivor;
+    private javax.swing.JCheckBox last24HoursInformCheckbox;
     private javax.swing.JLabel lblHuella;
     private javax.swing.JLabel lblNombreIdentificated;
     private javax.swing.JLabel lblRutIdentificated;
@@ -1091,6 +1190,100 @@ public class mainForm extends javax.swing.JFrame implements EnrollingListener, V
         jtableSensorBehivor.setModel(dtm);
         jtableSensorBehivor.sizeColumnsToFit(WIDTH);
 
+    }
+
+    private void saveFileToDisk() {
+        JFileChooser chooser = new JFileChooser();
+        while (true) {
+            if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                try {
+                    File file = chooser.getSelectedFile();
+                    if (!file.toString().toLowerCase().endsWith(".csv")) {
+                        file = new File(file.toString() + ".csv");
+                    }
+                    if (file.exists()) {
+                        int choice = JOptionPane.showConfirmDialog(this,
+                                String.format("El Archivo \"%1$s\" ya existe.\n¿Quiere reemplazarlo?", file.toString()),
+                                "Guardar Informe",
+                                JOptionPane.YES_NO_CANCEL_OPTION);
+                        if (choice == JOptionPane.NO_OPTION) {
+                            continue;
+                        } else if (choice == JOptionPane.CANCEL_OPTION) {
+                            break;
+                        }
+                    }
+                    FileWriter stream = new FileWriter(file);
+                    String[] columnTitle = {"ID Usuario;", "Nombre;", "Rut;", "Fecha Verificacion\n"};
+                    for (String columnTitle1 : columnTitle) {
+                        stream.write(columnTitle1);
+                    }
+                    Optional<List<DBUser>> exportDailyData = userDao.exportDailyData();
+                    if (exportDailyData.isPresent()) {
+                        List<DBUser> listDailyUsers = exportDailyData.get();
+                        for (DBUser user : listDailyUsers) {
+                            stream.write(user.getId() + ";");
+                            stream.write(user.getFullname() + ";");
+                            stream.write(user.getRut() + ";");
+                            stream.write(user.getVerifyDate() + "\n");
+                        }
+                    } else {
+                        log.warning("No se encontraron registros");
+                    }
+                    stream.close();
+                } catch (HeadlessException | IOException ex) {
+                    JOptionPane.showMessageDialog(this, ex.getLocalizedMessage(), "Guardar Informe", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            break;
+
+        }
+    }
+
+    private void saveFileToDisk(String fecha1, String fecha2) {
+        JFileChooser chooser = new JFileChooser();
+        while (true) {
+            if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                try {
+                    File file = chooser.getSelectedFile();
+                    if (!file.toString().toLowerCase().endsWith(".csv")) {
+                        file = new File(file.toString() + ".csv");
+                    }
+                    if (file.exists()) {
+                        int choice = JOptionPane.showConfirmDialog(this,
+                                String.format("El Archivo \"%1$s\" ya existe.\n¿Quiere reemplazarlo?", file.toString()),
+                                "Guardar Informe",
+                                JOptionPane.YES_NO_CANCEL_OPTION);
+                        if (choice == JOptionPane.NO_OPTION) {
+                            continue;
+                        } else if (choice == JOptionPane.CANCEL_OPTION) {
+                            break;
+                        }
+                    }
+                    FileWriter stream = new FileWriter(file);
+                    String[] columnTitle = {"ID Usuario;", "Nombre;", "Rut;", "Fecha Verificacion\n"};
+                    for (String columnTitle1 : columnTitle) {
+                        stream.write(columnTitle1);
+                    }
+                    Optional<List<DBUser>> exportDailyData = userDao.exportDateData(fecha1, fecha2);
+                    if (exportDailyData.isPresent()) {
+                        List<DBUser> listDailyUsers = exportDailyData.get();
+                        for (DBUser user : listDailyUsers) {
+                            stream.write(user.getId() + ";");
+                            stream.write(user.getFullname() + ";");
+                            stream.write(user.getRut() + ";");
+                            stream.write(user.getVerifyDate() + "\n");
+                        }
+                    } else {
+                        log.warning("No se encontraron registros");
+                    }
+                    stream.close();
+                } catch (HeadlessException | IOException ex) {
+                    JOptionPane.showMessageDialog(this, ex.getLocalizedMessage(), "Guardar Informe", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            break;
+
+        }
     }
 
     //Los objetos de MiHilo se pueden ejecutar en sus propios hilos
