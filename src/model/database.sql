@@ -2,14 +2,14 @@ DROP DATABASE IF EXISTS fpdb;
 CREATE DATABASE fpdb;
 USE fpdb;
 
-CREATE TABLE institute( -- SELECT * FROM institute
+CREATE TABLE institute( 
     id INT AUTO_INCREMENT,
     name VARCHAR(100),
     UNIQUE(name),
     PRIMARY KEY (id)
 );
 
-CREATE TABLE user_type( -- SELECT * FROM user_type
+CREATE TABLE user_type(
     id INT AUTO_INCREMENT,
     name VARCHAR(100),
     priority INT,
@@ -18,7 +18,7 @@ CREATE TABLE user_type( -- SELECT * FROM user_type
 );
 
 
-CREATE TABLE user ( -- SELECT * FROM user
+CREATE TABLE user (
     id INT AUTO_INCREMENT,
     fullname VARCHAR(100),
     rut VARCHAR(15),
@@ -31,17 +31,13 @@ CREATE TABLE user ( -- SELECT * FROM user
     UNIQUE(rut)
 );
 
-CREATE TABLE history ( -- SELECT * FROM history
+CREATE TABLE history (
     id INT AUTO_INCREMENT,
     user_id_fk INT,
     register_date DATETIME,
     PRIMARY KEY (id),
     FOREIGN KEY (user_id_fk) REFERENCES user(id)
 );
-
-
-
-
 
 
 INSERT INTO user_type VALUES(NULL,'Student',100);
