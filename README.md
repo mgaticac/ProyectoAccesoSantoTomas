@@ -74,6 +74,6 @@ javaw -jar IngresoSantoTomas.jar
 ```
 
 # 📕 Licencia 
-Este proyecto creado por [klawx3](https://github.com/klawx3) y [xzeromarkx](https://github.com/XZeromarx) esta bajo la licencia:
+Este proyecto creado por [klawx3](https://github.com/klawx3) y [xzeromarx](https://github.com/XZeromarx) esta bajo la licencia:
 > GNU GENERAL PUBLIC LICENSE
 > Version 3, 29 June 2007
